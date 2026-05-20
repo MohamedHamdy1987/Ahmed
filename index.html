@@ -684,14 +684,42 @@
                 top: 0;
                 width: 100%;
                 box-shadow: none;
-            }            .invoice-page {
+            }
+            .invoice-page {
                 box-shadow: none;
-                padding: 20px;
+                padding: 14px 18px;
+                page-break-inside: avoid;
+                page-break-after: avoid;
+                max-width: 100%;
             }
             .main-content {
                 margin-right: 0;
                 padding: 0;
             }
+            .invoice-header {
+                margin-bottom: 10px;
+                padding-bottom: 8px;
+            }
+            .invoice-logo {
+                width: 55px;
+                height: 55px;
+                font-size: 16px;
+            }
+            .invoice-title h2 { font-size: 17px; }
+            .invoice-info-grid {
+                gap: 12px;
+                margin-bottom: 10px;
+            }
+            .info-block h4 { font-size: 12px; margin-bottom: 5px; }
+            .info-block p { font-size: 11px; margin-bottom: 2px; }
+            .preview-table { margin: 8px 0; }
+            .preview-table th { padding: 6px 5px; font-size: 11px; }
+            .preview-table td { padding: 5px; font-size: 11px; }
+            .preview-summary table { width: 230px; }
+            .preview-summary td { padding: 5px 8px; font-size: 12px; }
+            .preview-qr { margin-top: 12px; padding-top: 10px; }
+            .preview-qr img, .preview-qr canvas { width: 90px !important; height: 90px !important; }
+            .preview-notes { margin-top: 8px; font-size: 11px; }
         }
 
         /* ============================================
@@ -789,36 +817,29 @@
         </div>
 
         <!-- ============================================
-             قسم بيانات المشتري والفاتورة
+             قسم بيانات العميل والفاتورة
              ============================================ -->
         <div class="card no-print">
-            <div class="card-title">👤 بيانات الفاتورة والمشتري</div>
+            <div class="card-title">👤 بيانات الفاتورة والعميل</div>
             <div class="form-grid">
                 <div class="form-group">
                     <label>رقم الفاتورة</label>
-                    <input type="text" id="invoiceNumber" placeholder="INV-001">
+                    <input type="text" id="invoiceNumber" readonly style="background:var(--bg); font-weight:700; color:var(--primary);">
                 </div>
                 <div class="form-group">
-                    <label>نوع التاريخ</label>
-                    <select id="dateType" onchange="updateDateInput()">
-                        <option value="gregorian">ميلادي</option>
-                        <option value="hijri">هجري</option>
-                    </select>
+                    <label>تاريخ الفاتورة</label>
+                    <input type="date" id="invoiceDate">
                 </div>
                 <div class="form-group">
-                    <label>تاريخ ووقت الفاتورة</label>
-                    <input type="datetime-local" id="invoiceDate">
-                </div>
-                <div class="form-group">
-                    <label>اسم المشتري (اختياري)</label>
+                    <label>اسم العميل (اختياري)</label>
                     <input type="text" id="buyerName" placeholder="اسم العميل">
                 </div>
                 <div class="form-group">
-                    <label>الرقم الضريبي للمشتري (اختياري)</label>
+                    <label>الرقم الضريبي للعميل (اختياري)</label>
                     <input type="text" id="buyerVAT" placeholder="إن وجد" maxlength="15">
                 </div>
                 <div class="form-group">
-                    <label>عنوان المشتري (اختياري)</label>
+                    <label>عنوان العميل (اختياري)</label>
                     <input type="text" id="buyerAddress" placeholder="عنوان العميل">
                 </div>
             </div>
@@ -926,7 +947,7 @@
                     </div>
                 </div>
 
-                <!-- بيانات البائع والمشتري -->
+                <!-- بيانات البائع والعميل -->
                 <div class="invoice-info-grid">
                     <div class="info-block">
                         <h4>🏢 بيانات البائع</h4>                        <p><span class="label">الاسم:</span> <span id="previewSellerName"></span></p>
@@ -934,7 +955,7 @@
                         <p><span class="label">العنوان:</span> <span id="previewSellerAddress"></span></p>
                     </div>
                     <div class="info-block">
-                        <h4>👤 بيانات المشتري</h4>
+                        <h4>👤 بيانات العميل</h4>
                         <p><span class="label">الاسم:</span> <span id="previewBuyerName"></span></p>
                         <p><span class="label">الرقم الضريبي:</span> <span id="previewBuyerVAT"></span></p>
                         <p><span class="label">العنوان:</span> <span id="previewBuyerAddress"></span></p>
@@ -1012,6 +1033,7 @@
         loadSellerData();        // استرجاع بيانات البائع المحفوظة
         loadSidebarList();       // تحميل قائمة الفواتير المحفوظة
         setDefaultDate();        // تعيين التاريخ الحالي افتراضياً
+        generateInvoiceNumber(); // توليد رقم فاتورة تسلسلي
         addItem();               // إضافة بند أولي
         addItem();               // إضافة بند ثاني
         loadTheme();             // تحميل حالة الوضع الليلي
@@ -1022,22 +1044,22 @@
     // ============================================
     function setDefaultDate() {
         const now = new Date();
-        // تحويل إلى صيغة datetime-local
         const year = now.getFullYear();
         const month = String(now.getMonth() + 1).padStart(2, '0');
         const day = String(now.getDate()).padStart(2, '0');
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');        document.getElementById('invoiceDate').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        document.getElementById('invoiceDate').value = `${year}-${month}-${day}`;
     }
 
     // ============================================
-    // تحديث نوع إدخال التاريخ (هجري / ميلادي)
+    // توليد رقم فاتورة تسلسلي تلقائي
     // ============================================
-    function updateDateInput() {
-        // نُبقي نفس الحقل لكن نغير التسمية فقط للعرض
-        const type = document.getElementById('dateType').value;
-        const label = document.querySelector('#invoiceDate').previousElementSibling;
-        label.textContent = type === 'hijri' ? 'تاريخ الفاتورة (هجري)' : 'تاريخ الفاتورة (ميلادي)';
+    function generateInvoiceNumber() {
+        let counter = parseInt(localStorage.getItem('zatca_inv_counter') || '663');
+        counter++;
+        localStorage.setItem('zatca_inv_counter', counter.toString());
+        const numStr = counter.toString().padStart(6, '0');
+        document.getElementById('invoiceNumber').value = numStr;
+        return numStr;
     }
 
     // ============================================
@@ -1145,7 +1167,7 @@
         // تحويل إلى صيغة ISO 8601
         let isoDate = '';
         if (invoiceDateStr) {
-            const d = new Date(invoiceDateStr);
+            const d = new Date(invoiceDateStr + 'T00:00:00');
             isoDate = d.toISOString().replace(/\.\d{3}Z$/, 'Z');
         } else {
             isoDate = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
@@ -1335,14 +1357,10 @@
     // ============================================
     function formatDateDisplay(dateStr) {
         if (!dateStr) return '';
-        const d = new Date(dateStr);
-        return d.toLocaleDateString('ar-SA', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+        // دعم كلا الصيغتين: YYYY-MM-DD أو YYYY-MM-DDTHH:mm
+        const datePart = dateStr.split('T')[0];
+        const [year, month, day] = datePart.split('-');
+        return `${day.padStart(2,'0')}/${month.padStart(2,'0')}/${year}`;
     }
 
     // ============================================
@@ -1484,7 +1502,7 @@
     // ============================================
     function newInvoice() {
         currentInvoiceId = null;
-        document.getElementById('invoiceNumber').value = '';
+        generateInvoiceNumber(); // رقم تسلسلي جديد
         document.getElementById('buyerName').value = '';
         document.getElementById('buyerVAT').value = '';
         document.getElementById('buyerAddress').value = '';
@@ -1550,20 +1568,15 @@
             const imgWidth = pageWidth - (margin * 2);
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-            // إذا كانت الصورة أطول من الصفحة، نقسمها
+            // دائماً نضغط الفاتورة لتناسب صفحة واحدة
             if (imgHeight <= pageHeight - (margin * 2)) {
                 pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
             } else {
-                let heightLeft = imgHeight;
-                let position = margin;
-                let page = 0;
-
-                while (heightLeft > 0) {
-                    if (page > 0) pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', margin, position - (page * (pageHeight - margin * 2)), imgWidth, imgHeight);
-                    heightLeft -= (pageHeight - margin * 2);
-                    page++;
-                }
+                // تصغير النسبة لتناسب الصفحة كاملة
+                const scaledHeight = pageHeight - (margin * 2);
+                const scaledWidth = (canvas.width * scaledHeight) / canvas.height;
+                const xOffset = margin + (imgWidth - scaledWidth) / 2;
+                pdf.addImage(imgData, 'PNG', xOffset, margin, scaledWidth, scaledHeight);
             }
 
             const data = getInvoiceData();            pdf.save(`فاتورة_${data.invoiceNumber}.pdf`);
