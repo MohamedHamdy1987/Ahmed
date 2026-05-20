@@ -9,7 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <!-- مكتبة QR Code -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+    </script>
 
     <!-- مكتبة Moment.js مع الدعم الهجري -->
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
@@ -47,7 +48,8 @@
         }
 
         /* متغيرات الوضع الليلي */
-        [data-theme="dark"] {            --primary: #3498db;
+        [data-theme="dark"] {
+            --primary: #3498db;
             --primary-light: #5dade2;
             --primary-dark: #1a5276;
             --bg: #1a1a2e;
@@ -145,7 +147,8 @@
 
         .sidebar-item .inv-total {
             font-size: 12px;
-            color: #27ae60;            font-weight: 600;
+            color: #27ae60;
+            font-weight: 600;
         }
 
         .sidebar-item .delete-inv {
@@ -194,7 +197,8 @@
             border-radius: var(--radius);
             cursor: pointer;
             font-family: inherit;
-            font-size: 14px;            color: var(--text);
+            font-size: 14px;
+            color: var(--text);
             transition: all 0.2s;
         }
 
@@ -243,7 +247,8 @@
 
         .form-group {
             display: flex;
-            flex-direction: column;        }
+            flex-direction: column;
+        }
 
         .form-group label {
             font-size: 13px;
@@ -292,7 +297,8 @@
             color: white;
             padding: 10px 8px;
             font-size: 13px;
-            font-weight: 600;            text-align: center;
+            font-weight: 600;
+            text-align: center;
         }
 
         .items-table td {
@@ -341,7 +347,8 @@
             background: var(--danger-hover);
         }
 
-        /* ============================================           الأزرار
+        /* ============================================
+           الأزرار
            ============================================ */
         .btn {
             padding: 10px 20px;
@@ -391,6 +398,7 @@
             color: white;
             border-color: var(--primary);
         }
+
         .actions-bar {
             display: flex;
             gap: 10px;
@@ -399,7 +407,7 @@
         }
 
         /* ============================================
-           الملخص المالي
+           الملخص المالي (في وضع الإدخال)
            ============================================ */
         .summary-box {
             display: flex;
@@ -439,8 +447,9 @@
             font-size: 16px;
             border: none;
         }
+
         /* ============================================
-           QR Code وعرض Base64
+           QR Code وعرض Base64 (بطاقة الإدخال)
            ============================================ */
         .qr-section {
             display: flex;
@@ -485,10 +494,11 @@
         }
 
         /* ============================================
-           معاينة الفاتورة
+           معاينة الفاتورة (التصميم الاحترافي الجديد)
            ============================================ */
         #invoice-preview {
-            display: none;        }
+            display: none;
+        }
 
         .invoice-page {
             background: white;
@@ -500,142 +510,91 @@
             box-shadow: var(--shadow-lg);
         }
 
-        .invoice-header {
+        /* الهيدر الحديث */
+        .modern-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 25px;
+            border-bottom: 2px solid #dcdde1;
             padding-bottom: 15px;
-            border-bottom: 3px solid #1a5276;
-        }
-
-        .invoice-logo {
-            width: 80px;
-            height: 80px;
-            background: #1a5276;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 24px;
-        }
-
-        .invoice-title {
-            text-align: center;
-            flex: 1;
-        }
-
-        .invoice-title h2 {
-            font-size: 22px;
-            color: #1a5276;
-        }
-
-        .invoice-title p {
-            font-size: 12px;
-            color: #7f8c8d;
-        }
-
-        .invoice-info-grid {            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
             margin-bottom: 20px;
         }
 
-        .info-block h4 {
-            font-size: 14px;
-            color: #1a5276;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #dcdde1;
-            padding-bottom: 5px;
+        .header-side {
+            width: 40%;
         }
 
-        .info-block p {
-            font-size: 13px;
-            margin-bottom: 4px;
-            color: #2c3e50;
+        .header-left {
+            text-align: left;
+            direction: ltr;
         }
 
-        .info-block .label {
-            font-weight: 600;
-            color: #7f8c8d;
+        .header-right {
+            text-align: right;
         }
 
-        .preview-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        .preview-table th {
-            background: #1a5276;
-            color: white;
-            padding: 10px;
-            font-size: 12px;
-        }
-
-        .preview-table td {
-            padding: 10px;
-            border-bottom: 1px solid #dcdde1;
-            font-size: 13px;
-            text-align: center;
-        }
-
-        .preview-table tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-
-        .preview-summary {            display: flex;
-            justify-content: flex-end;
-        }
-
-        .preview-summary table {
-            width: 280px;
-            border-collapse: collapse;
-        }
-
-        .preview-summary td {
-            padding: 8px 12px;
-            border-bottom: 1px solid #dcdde1;
-            font-size: 13px;
-        }
-
-        .preview-summary tr:last-child {
-            background: #1a5276;
-            color: white;
+        .header-side h3 {
+            font-size: 28px;
+            color: #1a2f6b;
+            margin-bottom: 6px;
             font-weight: 700;
-            font-size: 15px;
         }
 
-        .preview-summary tr:last-child td {
-            border: none;
-            color: white;
+        .header-side p {
+            margin: 2px 0;
+            font-size: 14px;
+            color: #444;
         }
 
-        .preview-qr {
+        .invoice-main-title {
             text-align: center;
+            font-size: 42px;
+            font-weight: 700;
+            color: #142c6e;
+            margin: 25px 0;
+        }
+
+        /* تذييل الفاتورة الجديد */
+        .invoice-footer-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
             margin-top: 25px;
-            padding-top: 20px;
-            border-top: 2px dashed #dcdde1;
+            gap: 20px;
         }
 
-        .preview-qr #qrcode-preview {
+        .qr-side {
+            text-align: center;
+        }
+
+        .qr-side #qrcode-preview {
+            padding: 8px;
+            border: 1px solid #ccc;
+            background: #fff;
             display: inline-block;
-            background: white;
-            padding: 10px;
-            border: 1px solid #dcdde1;
-            border-radius: 8px;
         }
 
-        .preview-qr p {
-            font-size: 12px;
-            color: #7f8c8d;
-            margin-top: 8px;
+        .qr-side p {
+            font-size: 11px;
+            margin-top: 5px;
+            color: #777;
         }
 
+        .totals-side table {
+            border-collapse: collapse;
+            min-width: 350px;
+        }
+
+        .totals-side td {
+            padding: 8px 12px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* ملاحظات المعاينة */
         .preview-notes {
-            margin-top: 20px;            padding: 10px;
+            margin-top: 20px;
+            padding: 10px;
             background: #f8f9fa;
             border-radius: 8px;
             font-size: 13px;
@@ -696,30 +655,33 @@
                 margin-right: 0;
                 padding: 0;
             }
-            .invoice-header {
-                margin-bottom: 10px;
-                padding-bottom: 8px;
+            .modern-header {
+                padding-bottom: 10px;
+                margin-bottom: 15px;
             }
-            .invoice-logo {
-                width: 55px;
-                height: 55px;
-                font-size: 16px;
+            .header-side h3 {
+                font-size: 22px;
             }
-            .invoice-title h2 { font-size: 17px; }
-            .invoice-info-grid {
-                gap: 12px;
-                margin-bottom: 10px;
+            .invoice-main-title {
+                font-size: 32px;
+                margin: 18px 0;
             }
-            .info-block h4 { font-size: 12px; margin-bottom: 5px; }
-            .info-block p { font-size: 11px; margin-bottom: 2px; }
-            .preview-table { margin: 8px 0; }
-            .preview-table th { padding: 6px 5px; font-size: 11px; }
-            .preview-table td { padding: 5px; font-size: 11px; }
-            .preview-summary table { width: 230px; }
-            .preview-summary td { padding: 5px 8px; font-size: 12px; }
-            .preview-qr { margin-top: 12px; padding-top: 10px; }
-            .preview-qr img, .preview-qr canvas { width: 90px !important; height: 90px !important; }
-            .preview-notes { margin-top: 8px; font-size: 11px; }
+            .invoice-footer-area {
+                gap: 15px;
+                margin-top: 18px;
+            }
+            .totals-side table {
+                min-width: 280px;
+            }
+            .qr-side #qrcode-preview img,
+            .qr-side #qrcode-preview canvas {
+                width: 90px !important;
+                height: 90px !important;
+            }
+            .preview-notes {
+                margin-top: 12px;
+                font-size: 11px;
+            }
         }
 
         /* ============================================
@@ -744,13 +706,24 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
-            .invoice-header {
+            .modern-header {
                 flex-direction: column;
                 align-items: center;
                 gap: 15px;
             }
-            .invoice-info-grid {
-                grid-template-columns: 1fr;
+            .header-side {
+                width: 100%;
+                text-align: center !important;
+            }
+            .header-left {
+                direction: ltr;
+            }
+            .invoice-main-title {
+                font-size: 28px;
+            }
+            .invoice-footer-area {
+                flex-direction: column;
+                align-items: center;
             }
             .items-table {
                 font-size: 12px;
@@ -761,7 +734,8 @@
             }
             .items-table input {
                 padding: 5px;
-                font-size: 12px;            }
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -804,13 +778,18 @@
             <div class="form-grid">
                 <div class="form-group">
                     <label>اسم البائع / المنشأة</label>
-                    <input type="text" id="sellerName" placeholder="مثال: مؤسسة التجارة الحديثة">
+                    <input type="text" id="sellerName" placeholder="مثال: مؤسسة أعمدة الوطن">
                 </div>
                 <div class="form-group">
                     <label>الرقم الضريبي (VAT)</label>
-                    <input type="text" id="sellerVAT" placeholder="مثال: 300012345600003" maxlength="15" pattern="\d{15}">
+                    <input type="text" id="sellerVAT" placeholder="مثال: 300012345600003" maxlength="15">
                 </div>
-                <div class="form-group">                    <label>عنوان البائع</label>
+                <div class="form-group">
+                    <label>الرقم الموحد</label>
+                    <input type="text" id="sellerUnified" placeholder="7016971173">
+                </div>
+                <div class="form-group">
+                    <label>عنوان البائع</label>
                     <input type="text" id="sellerAddress" placeholder="المدينة، الحي، الشارع">
                 </div>
             </div>
@@ -852,7 +831,8 @@
             <div class="card-title">📦 بنود الفاتورة</div>
             <div style="overflow-x:auto;">
                 <table class="items-table" id="itemsTable">
-                    <thead>                        <tr>
+                    <thead>
+                        <tr>
                             <th style="width:40px;">#</th>
                             <th>اسم المنتج / الخدمة</th>
                             <th style="width:80px;">الكمية</th>
@@ -874,7 +854,7 @@
                 <button class="btn btn-accent" onclick="addItem()">+ إضافة منتج</button>
             </div>
 
-            <!-- الملخص المالي -->
+            <!-- الملخص المالي (خارج المعاينة) -->
             <div class="summary-box">
                 <table class="summary-table">
                     <tr>
@@ -902,8 +882,9 @@
                 <textarea id="invoiceNotes" placeholder="أي ملاحظات إضافية على الفاتورة..."></textarea>
             </div>
         </div>
+
         <!-- ============================================
-             قسم QR Code والتحقق
+             قسم QR Code والتحقق (بطاقة الإدخال)
              ============================================ -->
         <div class="card no-print" id="qrCard" style="display:none;">
             <div class="card-title">📱 رمز الاستجابة السريع (QR Code) - معيار ZATCA</div>
@@ -929,40 +910,35 @@
         </div>
 
         <!-- ============================================
-             معاينة الفاتورة
+             معاينة الفاتورة (التصميم الاحترافي الجديد)
              ============================================ -->
         <div id="invoice-preview">
             <div class="invoice-page" id="invoicePage">
-                <!-- ترويسة الفاتورة -->
-                <div class="invoice-header">
-                    <div class="invoice-logo" id="previewLogo">شعار</div>
-                    <div class="invoice-title">
-                        <h2>فاتورة ضريبية</h2>
-                        <p>TAX INVOICE</p>
-                        <p id="previewInvoiceNum"></p>
+                <!-- الهيدر الحديث -->
+                <div class="modern-header">
+                    <!-- English -->
+                    <div class="header-side header-left">
+                        <h3 id="previewSellerNameEn">Kingdom of Saudi Arabia</h3>
+                        <p>Kingdom of Saudi Arabia</p>
+                        <p>VAT number <span id="previewSellerVATEn"></span></p>
+                        <p>Unified number <span id="previewSellerUnifiedEn"></span></p>
                     </div>
-                    <div style="text-align:left;">
-                        <p style="font-size:13px; color:#7f8c8d;">التاريخ</p>
-                        <p style="font-size:14px; font-weight:600;" id="previewDate"></p>
+
+                    <!-- Arabic -->
+                    <div class="header-side header-right">
+                        <h3 id="previewSellerNameAr"></h3>
+                        <p>المملكة العربية السعودية</p>
+                        <p>رقم التسجيل الضريبي <span id="previewSellerVATAr"></span></p>
+                        <p>الرقم الموحد <span id="previewSellerUnifiedAr"></span></p>
                     </div>
                 </div>
 
-                <!-- بيانات البائع والعميل -->
-                <div class="invoice-info-grid">
-                    <div class="info-block">
-                        <h4>🏢 بيانات البائع</h4>                        <p><span class="label">الاسم:</span> <span id="previewSellerName"></span></p>
-                        <p><span class="label">الرقم الضريبي:</span> <span id="previewSellerVAT"></span></p>
-                        <p><span class="label">العنوان:</span> <span id="previewSellerAddress"></span></p>
-                    </div>
-                    <div class="info-block">
-                        <h4>👤 بيانات العميل</h4>
-                        <p><span class="label">الاسم:</span> <span id="previewBuyerName"></span></p>
-                        <p><span class="label">الرقم الضريبي:</span> <span id="previewBuyerVAT"></span></p>
-                        <p><span class="label">العنوان:</span> <span id="previewBuyerAddress"></span></p>
-                    </div>
+                <!-- العنوان الرئيسي -->
+                <div class="invoice-main-title">
+                    فاتورة ضريبية Tax Invoice
                 </div>
 
-                <!-- جدول البنود -->
+                <!-- جدول البنود (كما هو) -->
                 <table class="preview-table">
                     <thead>
                         <tr>
@@ -980,27 +956,29 @@
                     </tbody>
                 </table>
 
-                <!-- المجاميع -->
-                <div class="preview-summary">
-                    <table>
-                        <tr>
-                            <td>إجمالي قبل الضريبة</td>
-                            <td id="previewSubtotal">0.00 ر.س</td>
-                        </tr>
-                        <tr>
-                            <td>إجمالي الضريبة</td>
-                            <td id="previewTax">0.00 ر.س</td>
-                        </tr>
-                        <tr>
-                            <td>الإجمالي الكلي</td>
-                            <td id="previewTotal">0.00 ر.س</td>
-                        </tr>
-                    </table>
-                </div>
+                <!-- المجاميع + QR في تذييل واحد -->
+                <div class="invoice-footer-area">
+                    <div class="totals-side">
+                        <table>
+                            <tr>
+                                <td>Subtotal المجموع الفرعي</td>
+                                <td id="previewSubtotal">0.00 ر.س</td>
+                            </tr>
+                            <tr>
+                                <td>Total VAT إجمالي الضريبة</td>
+                                <td id="previewTax">0.00 ر.س</td>
+                            </tr>
+                            <tr>
+                                <td>Total المجموع شامل الضريبة</td>
+                                <td id="previewTotal">0.00 ر.س</td>
+                            </tr>
+                        </table>
+                    </div>
 
-                <!-- QR Code في المعاينة -->
-                <div class="preview-qr">                    <div id="qrcode-preview"></div>
-                    <p>باركود فاتورة إلكترونية - زاتكا</p>
+                    <div class="qr-side">
+                        <div id="qrcode-preview"></div>
+                        <p>This QR code complies with ZATCA requirements</p>
+                    </div>
                 </div>
 
                 <!-- ملاحظات -->
@@ -1021,27 +999,24 @@
     // ============================================
     // متغيرات عامة
     // ============================================
-    let itemCount = 0;           // عداد البنود
-    let currentInvoiceId = null; // معرف الفاتورة الحالية
-    let qrCodeInstance = null;   // مرجع كائن QR
+    let itemCount = 0;
+    let currentInvoiceId = null;
+    let qrCodeInstance = null;
     let qrPreviewInstance = null;
 
     // ============================================
     // تهيئة الصفحة عند التحميل
     // ============================================
     document.addEventListener('DOMContentLoaded', function() {
-        loadSellerData();        // استرجاع بيانات البائع المحفوظة
-        loadSidebarList();       // تحميل قائمة الفواتير المحفوظة
-        setDefaultDate();        // تعيين التاريخ الحالي افتراضياً
-        generateInvoiceNumber(); // توليد رقم فاتورة تسلسلي
-        addItem();               // إضافة بند أولي
-        addItem();               // إضافة بند ثاني
-        loadTheme();             // تحميل حالة الوضع الليلي
+        loadSellerData();
+        loadSidebarList();
+        setDefaultDate();
+        generateInvoiceNumber();
+        addItem();
+        addItem();
+        loadTheme();
     });
 
-    // ============================================
-    // تعيين التاريخ والوقت الحالي افتراضياً
-    // ============================================
     function setDefaultDate() {
         const now = new Date();
         const year = now.getFullYear();
@@ -1050,9 +1025,6 @@
         document.getElementById('invoiceDate').value = `${year}-${month}-${day}`;
     }
 
-    // ============================================
-    // توليد رقم فاتورة تسلسلي تلقائي
-    // ============================================
     function generateInvoiceNumber() {
         let counter = parseInt(localStorage.getItem('zatca_inv_counter') || '663');
         counter++;
@@ -1062,9 +1034,6 @@
         return numStr;
     }
 
-    // ============================================
-    // إضافة بند جديد للجدول
-    // ============================================
     function addItem() {
         itemCount++;
         const tbody = document.getElementById('itemsBody');
@@ -1085,9 +1054,6 @@
         calculateRow(tr.querySelector('.item-qty'));
     }
 
-    // ============================================
-    // حذف بند من الجدول
-    // ============================================
     function removeItem(btn) {
         const tr = btn.closest('tr');
         tr.remove();
@@ -1095,30 +1061,22 @@
         calculateTotals();
     }
 
-    // ============================================
-    // إعادة ترقيم البنود بعد الحذف
-    // ============================================
-    function renumberItems() {        const rows = document.querySelectorAll('#itemsBody tr');
+    function renumberItems() {
+        const rows = document.querySelectorAll('#itemsBody tr');
         rows.forEach((row, idx) => {
             row.querySelector('td:first-child').textContent = idx + 1;
         });
         itemCount = rows.length;
     }
 
-    // ============================================
-    // حساب القيم في صف معين عند التغيير
-    // ============================================
     function calculateRow(input) {
         const tr = input.closest('tr');
         const qty = parseFloat(tr.querySelector('.item-qty').value) || 0;
         const price = parseFloat(tr.querySelector('.item-price').value) || 0;
         const taxRate = parseFloat(tr.querySelector('.item-tax').value) || 0;
 
-        // الإجمالي قبل الضريبة = الكمية × سعر الوحدة
         const subtotal = qty * price;
-        // قيمة الضريبة = الإجمالي قبل الضريبة × النسبة
         const taxVal = subtotal * (taxRate / 100);
-        // الإجمالي شامل الضريبة
         const total = subtotal + taxVal;
 
         tr.querySelector('.item-subtotal').value = subtotal.toFixed(2);
@@ -1128,9 +1086,6 @@
         calculateTotals();
     }
 
-    // ============================================
-    // حساب مجاميع الفاتورة الكلية
-    // ============================================
     function calculateTotals() {
         let totalSubtotal = 0;
         let totalTax = 0;
@@ -1147,8 +1102,6 @@
         document.getElementById('sumTotal').textContent = totalWithTax.toFixed(2) + ' ر.س';
     }
 
-    // ============================================    // الحصول على بيانات الفاتورة من النموذج
-    // ============================================
     function getInvoiceData() {
         const items = [];
         document.querySelectorAll('#itemsBody tr').forEach(tr => {
@@ -1164,7 +1117,6 @@
         });
 
         const invoiceDateStr = document.getElementById('invoiceDate').value;
-        // تحويل إلى صيغة ISO 8601
         let isoDate = '';
         if (invoiceDateStr) {
             const d = new Date(invoiceDateStr + 'T00:00:00');
@@ -1184,6 +1136,7 @@
             id: currentInvoiceId || Date.now().toString(),
             sellerName: document.getElementById('sellerName').value,
             sellerVAT: document.getElementById('sellerVAT').value,
+            sellerUnified: document.getElementById('sellerUnified').value,
             sellerAddress: document.getElementById('sellerAddress').value,
             invoiceNumber: document.getElementById('invoiceNumber').value || ('INV-' + Date.now().toString().slice(-6)),
             invoiceDate: invoiceDateStr,
@@ -1196,61 +1149,32 @@
             totalSubtotal: totalSubtotal,
             totalTax: totalTax,
             totalWithTax: totalWithTax
-        };    }
+        };
+    }
 
-    // ============================================
-    // توليد سلسلة TLV المشفرة لرمز QR
-    // وفق معيار ZATCA (المرحلة الأولى)
-    //
-    // التنسيق: Tag (1 بايت) + Length (1 بايت) + Value (بايتات UTF-8)
-    //
-    // Tag 1: اسم البائع
-    // Tag 2: الرقم الضريبي
-    // Tag 3: تاريخ الفاتورة بصيغة ISO 8601
-    // Tag 4: الإجمالي الكلي شامل الضريبة
-    // Tag 5: إجمالي الضريبة
-    //
-    // بعد تجميع كل البايتات → تحويل إلى Base64
-    // ============================================
     function encodeZATCATLV(sellerName, vatNumber, invoiceDate, totalWithTax, totalTax) {
-        /**
-         * دالة مساعدة لترميز وسم TLV واحد
-         * @param {number} tag - رقم الوسم (1-5)
-         * @param {string} value - القيمة النصية
-         * @returns {number[]} مصفوفة بايتات: [tag, length, ...valueBytes]
-         */
         function tlv(tag, value) {
-            // تحويل النص إلى بايتات UTF-8
             const valueBytes = new TextEncoder().encode(value);
-            // إرجاع: الوسم (1 بايت) + طول القيمة (1 بايت) + بايتات القيمة
             return [tag, valueBytes.length, ...valueBytes];
         }
-
-        // تجميع كل الوسوم بالترتيب المطلوب
         let allBytes = [];
-        allBytes = allBytes.concat(tlv(1, sellerName));           // Tag 1: اسم البائع
-        allBytes = allBytes.concat(tlv(2, vatNumber));           // Tag 2: الرقم الضريبي
-        allBytes = allBytes.concat(tlv(3, invoiceDate));         // Tag 3: التاريخ
-        allBytes = allBytes.concat(tlv(4, totalWithTax.toFixed(2))); // Tag 4: الإجمالي الكلي
-        allBytes = allBytes.concat(tlv(5, totalTax.toFixed(2)));     // Tag 5: إجمالي الضريبة
+        allBytes = allBytes.concat(tlv(1, sellerName));
+        allBytes = allBytes.concat(tlv(2, vatNumber));
+        allBytes = allBytes.concat(tlv(3, invoiceDate));
+        allBytes = allBytes.concat(tlv(4, totalWithTax.toFixed(2)));
+        allBytes = allBytes.concat(tlv(5, totalTax.toFixed(2)));
 
-        // تحويل مصفوفة البايتات إلى سلسلة ثنائية
         let binaryString = '';
         for (let i = 0; i < allBytes.length; i++) {
             binaryString += String.fromCharCode(allBytes[i]);
         }
-
-        // تحويل السلسلة الثنائية إلى Base64
         const base64 = btoa(binaryString);
         return base64;
     }
 
-    // ============================================    // توليد الفاتورة وعرض المعاينة
-    // ============================================
     function generateInvoice() {
         const data = getInvoiceData();
 
-        // التحقق من البيانات الأساسية
         if (!data.sellerName.trim()) {
             showToast('⚠️ يرجى إدخال اسم البائع', 'var(--warning)');
             return;
@@ -1260,12 +1184,10 @@
             return;
         }
 
-        // حفظ بيانات البائع تلقائياً
-        saveSellerData(data.sellerName, data.sellerVAT, data.sellerAddress);
+        // حفظ بيانات البائع
+        saveSellerData(data.sellerName, data.sellerVAT, data.sellerUnified, data.sellerAddress);
 
-        // ============================================
-        // إنشاء QR Code بتشفير TLV
-        // ============================================
+        // إنشاء QR
         const base64String = encodeZATCATLV(
             data.sellerName,
             data.sellerVAT,
@@ -1274,28 +1196,20 @@
             data.totalTax
         );
 
-        // عرض QR في بطاقة التحقق
         displayQRCode(base64String, 'qrcode');
-
-        // عرض QR في المعاينة
         displayQRCode(base64String, 'qrcode-preview');
-
-        // عرض Base64 للتحقق
         document.getElementById('base64Output').value = base64String;
         document.getElementById('qrCard').style.display = 'block';
 
-        // ============================================
-        // تعبئة معاينة الفاتورة
-        // ============================================
-        document.getElementById('previewInvoiceNum').textContent = data.invoiceNumber;
-        document.getElementById('previewDate').textContent = formatDateDisplay(data.invoiceDate);
-        document.getElementById('previewSellerName').textContent = data.sellerName;
-        document.getElementById('previewSellerVAT').textContent = data.sellerVAT;
-        document.getElementById('previewSellerAddress').textContent = data.sellerAddress || 'غير محدد';
-        document.getElementById('previewBuyerName').textContent = data.buyerName || 'غير محدد';
-        document.getElementById('previewBuyerVAT').textContent = data.buyerVAT || 'غير محدد';
-        document.getElementById('previewBuyerAddress').textContent = data.buyerAddress || 'غير محدد';
-        // تعبئة جدول البنود في المعاينة
+        // ملء الهيدر العربي والإنجليزي
+        document.getElementById('previewSellerNameAr').textContent = data.sellerName;
+        document.getElementById('previewSellerNameEn').textContent = data.sellerName;
+        document.getElementById('previewSellerVATAr').textContent = data.sellerVAT;
+        document.getElementById('previewSellerVATEn').textContent = data.sellerVAT;
+        document.getElementById('previewSellerUnifiedAr').textContent = data.sellerUnified || '';
+        document.getElementById('previewSellerUnifiedEn').textContent = data.sellerUnified || '';
+
+        // جدول البنود
         const previewBody = document.getElementById('previewItemsBody');
         previewBody.innerHTML = '';
         data.items.forEach((item, idx) => {
@@ -1314,7 +1228,7 @@
             previewBody.appendChild(tr);
         });
 
-        // المجاميع في المعاينة
+        // المجاميع (في التذييل)
         document.getElementById('previewSubtotal').textContent = data.totalSubtotal.toFixed(2) + ' ر.س';
         document.getElementById('previewTax').textContent = data.totalTax.toFixed(2) + ' ر.س';
         document.getElementById('previewTotal').textContent = data.totalWithTax.toFixed(2) + ' ر.س';
@@ -1327,23 +1241,17 @@
             document.getElementById('previewNotes').style.display = 'none';
         }
 
-        // إظهار المعاينة
         document.getElementById('invoice-preview').style.display = 'block';
-
-        // تمرير إلى المعاينة
         document.getElementById('invoice-preview').scrollIntoView({ behavior: 'smooth' });
 
         showToast('✅ تم توليد الفاتورة بنجاح');
     }
 
-    // ============================================
-    // عرض رمز QR في عنصر معين
-    // ============================================
     function displayQRCode(base64Str, containerId) {
         const container = document.getElementById(containerId);
-        container.innerHTML = ''; // مسح المحتوى السابق
-
-        new QRCode(container, {            text: base64Str,
+        container.innerHTML = '';
+        new QRCode(container, {
+            text: base64Str,
             width: 180,
             height: 180,
             colorDark: "#000000",
@@ -1352,72 +1260,54 @@
         });
     }
 
-    // ============================================
-    // تنسيق التاريخ للعرض
-    // ============================================
     function formatDateDisplay(dateStr) {
         if (!dateStr) return '';
-        // دعم كلا الصيغتين: YYYY-MM-DD أو YYYY-MM-DDTHH:mm
         const datePart = dateStr.split('T')[0];
         const [year, month, day] = datePart.split('-');
         return `${day.padStart(2,'0')}/${month.padStart(2,'0')}/${year}`;
     }
 
-    // ============================================
-    // حفظ بيانات البائع في localStorage
-    // ============================================
-    function saveSellerData(name, vat, address) {
+    function saveSellerData(name, vat, unified, address) {
         localStorage.setItem('zatca_sellerName', name);
         localStorage.setItem('zatca_sellerVAT', vat);
+        localStorage.setItem('zatca_sellerUnified', unified || '');
         localStorage.setItem('zatca_sellerAddress', address || '');
     }
 
-    // ============================================
-    // استرجاع بيانات البائع المحفوظة
-    // ============================================
     function loadSellerData() {
         const name = localStorage.getItem('zatca_sellerName');
         const vat = localStorage.getItem('zatca_sellerVAT');
+        const unified = localStorage.getItem('zatca_sellerUnified');
         const address = localStorage.getItem('zatca_sellerAddress');
         if (name) document.getElementById('sellerName').value = name;
         if (vat) document.getElementById('sellerVAT').value = vat;
+        if (unified) document.getElementById('sellerUnified').value = unified;
         if (address) document.getElementById('sellerAddress').value = address;
     }
 
-    // ============================================
-    // حفظ الفاتورة كمسودة في localStorage
-    // ============================================
     function saveDraft() {
-        const data = getInvoiceData();        let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-
-        // تحديث أو إضافة
+        const data = getInvoiceData();
+        let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
         const existingIdx = invoices.findIndex(inv => inv.id === data.id);
         if (existingIdx >= 0) {
             invoices[existingIdx] = data;
         } else {
             invoices.push(data);
         }
-
         localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
         currentInvoiceId = data.id;
         loadSidebarList();
         showToast('💾 تم حفظ المسودة بنجاح');
     }
 
-    // ============================================
-    // تحميل قائمة الفواتير في الشريط الجانبي
-    // ============================================
     function loadSidebarList() {
         const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
         const listEl = document.getElementById('saved-invoices-list');
-
         if (invoices.length === 0) {
             listEl.innerHTML = '<p style="text-align:center; opacity:0.6; padding:20px;">لا توجد فواتير محفوظة</p>';
             return;
         }
-
         listEl.innerHTML = '';
-        // ترتيب من الأحدث للأقدم
         invoices.reverse().forEach(inv => {
             const div = document.createElement('div');
             div.className = 'sidebar-item';
@@ -1432,16 +1322,15 @@
         });
     }
 
-    // ============================================
-    // تحميل فاتورة محفوظة
-    // ============================================
     function loadInvoice(id) {
         const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        const inv = invoices.find(i => i.id === id);        if (!inv) return;
+        const inv = invoices.find(i => i.id === id);
+        if (!inv) return;
 
         currentInvoiceId = inv.id;
         document.getElementById('sellerName').value = inv.sellerName || '';
         document.getElementById('sellerVAT').value = inv.sellerVAT || '';
+        document.getElementById('sellerUnified').value = inv.sellerUnified || '';
         document.getElementById('sellerAddress').value = inv.sellerAddress || '';
         document.getElementById('invoiceNumber').value = inv.invoiceNumber || '';
         document.getElementById('invoiceDate').value = inv.invoiceDate || '';
@@ -1450,11 +1339,9 @@
         document.getElementById('buyerAddress').value = inv.buyerAddress || '';
         document.getElementById('invoiceNotes').value = inv.notes || '';
 
-        // إعادة بناء البنود
         const tbody = document.getElementById('itemsBody');
         tbody.innerHTML = '';
         itemCount = 0;
-
         inv.items.forEach(item => {
             itemCount++;
             const tr = document.createElement('tr');
@@ -1472,21 +1359,16 @@
             `;
             tbody.appendChild(tr);
         });
-
         calculateTotals();
 
-        // إغلاق الشريط الجانبي في الجوال
         if (window.innerWidth <= 992) {
             document.getElementById('sidebar').classList.remove('open');
         }
-
         showToast('📂 تم تحميل الفاتورة');
     }
 
-    // ============================================
-    // حذف فاتورة محفوظة
-    // ============================================
-    function deleteInvoice(id) {        if (!confirm('هل أنت متأكد من حذف هذه الفاتورة؟')) return;
+    function deleteInvoice(id) {
+        if (!confirm('هل أنت متأكد من حذف هذه الفاتورة؟')) return;
         let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
         invoices = invoices.filter(i => i.id !== id);
         localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
@@ -1497,51 +1379,38 @@
         showToast('🗑️ تم حذف الفاتورة');
     }
 
-    // ============================================
-    // فاتورة جديدة
-    // ============================================
     function newInvoice() {
         currentInvoiceId = null;
-        generateInvoiceNumber(); // رقم تسلسلي جديد
+        generateInvoiceNumber();
         document.getElementById('buyerName').value = '';
         document.getElementById('buyerVAT').value = '';
         document.getElementById('buyerAddress').value = '';
         document.getElementById('invoiceNotes').value = '';
         setDefaultDate();
 
-        // مسح البنود وإضافة اثنين فارغين
         document.getElementById('itemsBody').innerHTML = '';
         itemCount = 0;
         addItem();
         addItem();
         calculateTotals();
 
-        // إخفاء المعاينة وQR
         document.getElementById('invoice-preview').style.display = 'none';
         document.getElementById('qrCard').style.display = 'none';
 
-        // إغلاق الشريط الجانبي
         if (window.innerWidth <= 992) {
             document.getElementById('sidebar').classList.remove('open');
         }
-
         showToast('📝 فاتورة جديدة');
     }
 
-    // ============================================
-    // طباعة الفاتورة
-    // ============================================
     function printInvoice() {
         if (document.getElementById('invoice-preview').style.display !== 'block') {
             showToast('⚠️ يرجى توليد الفاتورة أولاً');
             return;
-        }        window.print();
+        }
+        window.print();
     }
 
-    // ============================================
-    // تصدير الفاتورة كملف PDF
-    // باستخدام html2canvas + jsPDF
-    // ============================================
     async function exportPDF() {
         if (document.getElementById('invoice-preview').style.display !== 'block') {
             showToast('⚠️ يرجى توليد الفاتورة أولاً');
@@ -1549,7 +1418,6 @@
         }
 
         showToast('⏳ جاري إنشاء ملف PDF...');
-
         try {
             const element = document.getElementById('invoicePage');
             const canvas = await html2canvas(element, {
@@ -1568,18 +1436,17 @@
             const imgWidth = pageWidth - (margin * 2);
             const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-            // دائماً نضغط الفاتورة لتناسب صفحة واحدة
             if (imgHeight <= pageHeight - (margin * 2)) {
                 pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
             } else {
-                // تصغير النسبة لتناسب الصفحة كاملة
                 const scaledHeight = pageHeight - (margin * 2);
                 const scaledWidth = (canvas.width * scaledHeight) / canvas.height;
                 const xOffset = margin + (imgWidth - scaledWidth) / 2;
                 pdf.addImage(imgData, 'PNG', xOffset, margin, scaledWidth, scaledHeight);
             }
 
-            const data = getInvoiceData();            pdf.save(`فاتورة_${data.invoiceNumber}.pdf`);
+            const data = getInvoiceData();
+            pdf.save(`فاتورة_${data.invoiceNumber}.pdf`);
             showToast('✅ تم تصدير PDF بنجاح');
         } catch (err) {
             console.error(err);
@@ -1587,9 +1454,6 @@
         }
     }
 
-    // ============================================
-    // تبديل الوضع الليلي
-    // ============================================
     function toggleTheme() {
         const body = document.body;
         const isDark = body.getAttribute('data-theme') === 'dark';
@@ -1598,23 +1462,16 @@
         document.querySelector('.theme-toggle').textContent = isDark ? '🌙 الوضع الليلي' : '☀️ الوضع الفاتح';
     }
 
-    // تحميل حالة الوضع الليلي
     function loadTheme() {
         const theme = localStorage.getItem('zatca_theme') || 'light';
         document.body.setAttribute('data-theme', theme);
         document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️ الوضع الفاتح' : '🌙 الوضع الليلي';
     }
 
-    // ============================================
-    // تبديل الشريط الجانبي (للجوال)
-    // ============================================
     function toggleSidebar() {
         document.getElementById('sidebar').classList.toggle('open');
     }
 
-    // ============================================
-    // عرض إشعار Toast
-    // ============================================
     function showToast(message, bgColor) {
         const toast = document.getElementById('toast');
         toast.textContent = message;
