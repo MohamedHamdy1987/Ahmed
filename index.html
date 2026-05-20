@@ -4,26 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام الفوترة الإلكترونية - ZATCA</title>
-
-    <!-- خط Cairo من Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-    <!-- مكتبة QR Code -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
-    </script>
-
-    <!-- مكتبة Moment.js مع الدعم الهجري -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
-
-    <!-- مكتبات التصدير -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <style>
-        /* ============================================
-           المتغيرات الأساسية للألوان (الوضع الفاتح)
-           ============================================ */
         :root {
             --primary: #1a5276;
             --primary-light: #2980b9;
@@ -47,7 +34,6 @@
             --sidebar-width: 260px;
         }
 
-        /* متغيرات الوضع الليلي */
         [data-theme="dark"] {
             --primary: #3498db;
             --primary-light: #5dade2;
@@ -63,9 +49,6 @@
             --shadow-lg: 0 4px 16px rgba(0,0,0,0.4);
         }
 
-        /* ============================================
-           الأنماط العامة
-           ============================================ */
         * {
             margin: 0;
             padding: 0;
@@ -82,9 +65,6 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* ============================================
-           الشريط الجانبي
-           ============================================ */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--bg-sidebar);
@@ -103,24 +83,9 @@
             text-align: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-
-        .sidebar-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .sidebar-header p {
-            font-size: 12px;
-            opacity: 0.7;
-            margin-top: 4px;
-        }
-
-        .sidebar-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-        }
-
+        .sidebar-header h2 { font-size: 18px; font-weight: 700; }
+        .sidebar-header p { font-size: 12px; opacity: 0.7; margin-top: 4px; }
+        .sidebar-list { flex: 1; overflow-y: auto; padding: 10px; }
         .sidebar-item {
             padding: 12px;
             border-radius: var(--radius);
@@ -129,53 +94,19 @@
             transition: background 0.2s;
             border-right: 3px solid transparent;
         }
+        .sidebar-item:hover { background: rgba(255,255,255,0.1); border-right-color: var(--primary-light); }
+        .sidebar-item .inv-num { font-weight: 700; font-size: 14px; }
+        .sidebar-item .inv-date { font-size: 11px; opacity: 0.7; }
+        .sidebar-item .inv-total { font-size: 12px; color: #27ae60; font-weight: 600; }
+        .sidebar-item .delete-inv { float: left; background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 14px; padding: 0 5px; }
+        .sidebar-footer { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
 
-        .sidebar-item:hover {
-            background: rgba(255,255,255,0.1);
-            border-right-color: var(--primary-light);
-        }
-
-        .sidebar-item .inv-num {
-            font-weight: 700;
-            font-size: 14px;
-        }
-
-        .sidebar-item .inv-date {
-            font-size: 11px;
-            opacity: 0.7;
-        }
-
-        .sidebar-item .inv-total {
-            font-size: 12px;
-            color: #27ae60;
-            font-weight: 600;
-        }
-
-        .sidebar-item .delete-inv {
-            float: left;
-            background: none;
-            border: none;
-            color: #e74c3c;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 0 5px;
-        }
-
-        .sidebar-footer {
-            padding: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        /* ============================================
-           المحتوى الرئيسي
-           ============================================ */
         .main-content {
             flex: 1;
             margin-right: var(--sidebar-width);
             padding: 20px;
             min-height: 100vh;
         }
-
         .top-bar {
             display: flex;
             justify-content: space-between;
@@ -184,12 +115,7 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-
-        .top-bar h1 {
-            font-size: 24px;
-            color: var(--primary);
-        }
-
+        .top-bar h1 { font-size: 24px; color: var(--primary); }
         .theme-toggle {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -201,12 +127,7 @@
             color: var(--text);
             transition: all 0.2s;
         }
-
-        .theme-toggle:hover {
-            background: var(--primary);
-            color: white;
-        }
-
+        .theme-toggle:hover { background: var(--primary); color: white; }
         .menu-toggle {
             display: none;
             background: var(--primary);
@@ -218,9 +139,6 @@
             font-size: 18px;
         }
 
-        /* ============================================
-           البطاقات والنماذج
-           ============================================ */
         .card {
             background: var(--bg-card);
             border-radius: var(--radius);
@@ -229,7 +147,6 @@
             box-shadow: var(--shadow);
             transition: background 0.3s, box-shadow 0.3s;
         }
-
         .card-title {
             font-size: 18px;
             font-weight: 700;
@@ -238,25 +155,13 @@
             padding-bottom: 10px;
             border-bottom: 2px solid var(--border);
         }
-
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
         }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--text-light);
-        }
-
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label { font-size: 13px; font-weight: 600; margin-bottom: 5px; color: var(--text-light); }
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -269,29 +174,16 @@
             color: var(--text);
             transition: border-color 0.2s, box-shadow 0.2s;
         }
-
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.15);
+            box-shadow: 0 0 0 3px rgba(41,128,185,0.15);
         }
+        .form-group textarea { resize: vertical; min-height: 60px; }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 60px;
-        }
-
-        /* ============================================
-           جدول البنود
-           ============================================ */
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
+        .items-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .items-table th {
             background: var(--primary);
             color: white;
@@ -300,13 +192,7 @@
             font-weight: 600;
             text-align: center;
         }
-
-        .items-table td {
-            padding: 8px;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-        }
-
+        .items-table td { padding: 8px; border-bottom: 1px solid var(--border); text-align: center; }
         .items-table input {
             width: 100%;
             padding: 8px;
@@ -318,19 +204,8 @@
             background: var(--input-bg);
             color: var(--text);
         }
-
-        .items-table input:focus {
-            outline: none;
-            border-color: var(--primary-light);
-        }
-
-        .items-table .read-only {
-            background: var(--bg);
-            border: none;
-            font-weight: 600;
-            color: var(--text);
-        }
-
+        .items-table input:focus { outline: none; border-color: var(--primary-light); }
+        .items-table .read-only { background: var(--bg); border: none; font-weight: 600; color: var(--text); }
         .btn-remove-item {
             background: var(--danger);
             color: white;
@@ -342,14 +217,8 @@
             font-size: 16px;
             transition: background 0.2s;
         }
+        .btn-remove-item:hover { background: var(--danger-hover); }
 
-        .btn-remove-item:hover {
-            background: var(--danger-hover);
-        }
-
-        /* ============================================
-           الأزرار
-           ============================================ */
         .btn {
             padding: 10px 20px;
             border: none;
@@ -363,122 +232,30 @@
             align-items: center;
             gap: 8px;
         }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
+        .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-dark); }
-
-        .btn-accent {
-            background: var(--accent);
-            color: white;
-        }
+        .btn-accent { background: var(--accent); color: white; }
         .btn-accent:hover { background: var(--accent-hover); }
-
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
+        .btn-warning { background: var(--warning); color: white; }
         .btn-warning:hover { background: #d68910; }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
+        .btn-danger { background: var(--danger); color: white; }
         .btn-danger:hover { background: var(--danger-hover); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: var(--primary); color: white; border-color: var(--primary); }
+        .actions-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
 
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-        .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
+        .summary-box { display: flex; justify-content: flex-end; margin-top: 15px; }
+        .summary-table { width: 300px; border-collapse: collapse; }
+        .summary-table td { padding: 10px 15px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .summary-table td:first-child { font-weight: 600; color: var(--text-light); }
+        .summary-table td:last-child { text-align: left; font-weight: 700; font-size: 15px; }
+        .summary-table tr:last-child { background: var(--primary); color: white; }
+        .summary-table tr:last-child td { color: white; font-size: 16px; border: none; }
 
-        .actions-bar {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-
-        /* ============================================
-           الملخص المالي (في وضع الإدخال)
-           ============================================ */
-        .summary-box {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 15px;
-        }
-
-        .summary-table {
-            width: 300px;
-            border-collapse: collapse;
-        }
-
-        .summary-table td {
-            padding: 10px 15px;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
-
-        .summary-table td:first-child {
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        .summary-table td:last-child {
-            text-align: left;
-            font-weight: 700;
-            font-size: 15px;
-        }
-
-        .summary-table tr:last-child {
-            background: var(--primary);
-            color: white;
-        }
-
-        .summary-table tr:last-child td {
-            color: white;
-            font-size: 16px;
-            border: none;
-        }
-
-        /* ============================================
-           QR Code وعرض Base64 (بطاقة الإدخال)
-           ============================================ */
-        .qr-section {
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-
-        #qrcode-container {
-            background: white;
-            padding: 15px;
-            border-radius: var(--radius);
-            display: inline-block;
-        }
-
-        .base64-display {
-            flex: 1;
-            min-width: 250px;
-        }
-
-        .base64-display label {
-            font-weight: 600;
-            font-size: 13px;
-            color: var(--text-light);
-            display: block;
-            margin-bottom: 5px;
-        }
-
+        .qr-section { display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-top: 15px; }
+        #qrcode-container { background: white; padding: 15px; border-radius: var(--radius); display: inline-block; }
+        .base64-display { flex: 1; min-width: 250px; }
+        .base64-display label { font-weight: 600; font-size: 13px; color: var(--text-light); display: block; margin-bottom: 5px; }
         .base64-display textarea {
             width: 100%;
             min-height: 80px;
@@ -494,115 +271,208 @@
         }
 
         /* ============================================
-           معاينة الفاتورة (التصميم الاحترافي الجديد)
+           PROFESSIONAL A4 INVOICE LAYOUT (NEW)
            ============================================ */
         #invoice-preview {
             display: none;
+            margin-top: 25px;
         }
 
         .invoice-page {
-            background: white;
-            color: #2c3e50;
-            padding: 30px;
-            max-width: 800px;
-            margin: 0 auto;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
+            width: 210mm;
+            min-height: 297mm;
+            margin: auto;
+            background: #ffffff;
+            color: #1d1d1d;
+            padding: 14mm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+            font-family: 'Cairo', sans-serif;
+            position: relative;
         }
 
-        /* الهيدر الحديث */
-        .modern-header {
+        /* UPDATED HEADER WITH FLEX AND SPACING */
+        .invoice-top-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 2px solid #dcdde1;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            width: 100%;
+            border-bottom: 2px solid #d9d9d9;
+            padding-bottom: 14px;
+            margin-bottom: 22px;
+            gap: 80px;
         }
 
-        .header-side {
-            width: 40%;
+        .invoice-top-left,
+        .invoice-top-right {
+            width: 45%;
+            flex: 0 0 45%;
         }
 
-        .header-left {
-            text-align: left;
+        .invoice-top-left {
             direction: ltr;
+            text-align: left;
         }
 
-        .header-right {
+        .invoice-top-right {
+            direction: rtl;
             text-align: right;
         }
 
-        .header-side h3 {
-            font-size: 28px;
-            color: #1a2f6b;
-            margin-bottom: 6px;
-            font-weight: 700;
+        .invoice-top-left * {
+            text-align: left !important;
         }
 
-        .header-side p {
-            margin: 2px 0;
-            font-size: 14px;
+        .invoice-top-right * {
+            text-align: right !important;
+        }
+
+        .invoice-company-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1d2f6f;
+            margin-bottom: 5px;
+        }
+
+        .invoice-company-line {
+            font-size: 13px;
+            line-height: 1.8;
             color: #444;
         }
 
         .invoice-main-title {
             text-align: center;
-            font-size: 42px;
+            font-size: 34px;
             font-weight: 700;
-            color: #142c6e;
-            margin: 25px 0;
+            color: #17347a;
+            margin: 18px 0 22px;
         }
 
-        /* تذييل الفاتورة الجديد */
-        .invoice-footer-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 25px;
-            gap: 20px;
+        .invoice-info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 22px;
         }
 
-        .qr-side {
+        .invoice-info-table td {
+            border: 1px solid #d9d9d9;
+            padding: 7px 10px;
+            font-size: 13px;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #1d2f6f;
+            width: 18%;
+            background: #fafafa;
+        }
+
+        .invoice-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .invoice-items-table th {
+            border: 1px solid #d9d9d9;
+            padding: 10px 6px;
+            font-size: 12px;
+            color: #1d2f6f;
+            background: #fafafa;
+            font-weight: 700;
+        }
+
+        .invoice-items-table td {
+            border: 1px solid #d9d9d9;
+            padding: 10px 6px;
+            font-size: 13px;
             text-align: center;
         }
 
-        .qr-side #qrcode-preview {
-            padding: 8px;
-            border: 1px solid #ccc;
-            background: #fff;
-            display: inline-block;
+        .invoice-items-table .desc {
+            text-align: right;
+            padding-right: 12px;
         }
 
-        .qr-side p {
-            font-size: 11px;
-            margin-top: 5px;
-            color: #777;
+        .invoice-bottom {
+            margin-top: 22px;
+            display: table;
+            width: 100%;
         }
 
-        .totals-side table {
+        .invoice-bottom-left,
+        .invoice-bottom-right {
+            display: table-cell;
+            vertical-align: top;
+        }
+
+        .invoice-bottom-left { width: 65%; }
+        .invoice-bottom-right { width: 35%; text-align: right; }
+
+        .invoice-totals {
+            width: 100%;
             border-collapse: collapse;
-            min-width: 350px;
         }
 
-        .totals-side td {
-            padding: 8px 12px;
+        .invoice-totals td {
+            padding: 8px 5px;
             font-size: 15px;
             font-weight: 600;
         }
 
-        /* ملاحظات المعاينة */
-        .preview-notes {
-            margin-top: 20px;
+        .invoice-totals td:last-child {
+            text-align: left;
+            width: 130px;
+        }
+
+        .invoice-qr-box {
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .invoice-qr-box #qrcode-preview {
+            display: inline-block;
+            padding: 6px;
+            border: 1px solid #d9d9d9;
+            background: #fff;
+        }
+
+        .invoice-qr-note {
+            margin-top: 6px;
+            font-size: 10px;
+            color: #777;
+            line-height: 1.4;
+        }
+
+        .invoice-notes-box {
+            margin-top: 18px;
             padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #7f8c8d;
+            border: 1px solid #e0e0e0;
+            background: #fafafa;
+            font-size: 12px;
+        }
+
+        @media print {
+            body * { visibility: hidden; }
+            #invoice-preview, #invoice-preview * { visibility: visible; }
+            #invoice-preview {
+                display: block !important;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+            .invoice-page {
+                width: 100%;
+                min-height: auto;
+                margin: 0;
+                box-shadow: none;
+                padding: 10mm;
+            }
+            .sidebar, .top-bar, .actions-bar, .no-print { display: none !important; }
         }
 
         /* ============================================
-           Toast الإشعارات
+           RESPONSIVE & TOAST
            ============================================ */
         .toast {
             position: fixed;
@@ -618,132 +488,25 @@
             transition: transform 0.3s;
             box-shadow: var(--shadow-lg);
         }
+        .toast.show { transform: translateX(-50%) translateY(0); }
 
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* ============================================
-           طباعة الفاتورة
-           ============================================ */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .sidebar, .top-bar, .actions-bar, .no-print {
-                display: none !important;
-            }
-            #invoice-preview, #invoice-preview * {
-                visibility: visible;
-            }
-            #invoice-preview {
-                display: block !important;
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                box-shadow: none;
-            }
-            .invoice-page {
-                box-shadow: none;
-                padding: 14px 18px;
-                page-break-inside: avoid;
-                page-break-after: avoid;
-                max-width: 100%;
-            }
-            .main-content {
-                margin-right: 0;
-                padding: 0;
-            }
-            .modern-header {
-                padding-bottom: 10px;
-                margin-bottom: 15px;
-            }
-            .header-side h3 {
-                font-size: 22px;
-            }
-            .invoice-main-title {
-                font-size: 32px;
-                margin: 18px 0;
-            }
-            .invoice-footer-area {
-                gap: 15px;
-                margin-top: 18px;
-            }
-            .totals-side table {
-                min-width: 280px;
-            }
-            .qr-side #qrcode-preview img,
-            .qr-side #qrcode-preview canvas {
-                width: 90px !important;
-                height: 90px !important;
-            }
-            .preview-notes {
-                margin-top: 12px;
-                font-size: 11px;
-            }
-        }
-
-        /* ============================================
-           التصميم المتجاوب
-           ============================================ */
         @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(100%);
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .main-content {
-                margin-right: 0;
-            }
-            .menu-toggle {
-                display: block;
-            }
+            .sidebar { transform: translateX(100%); }
+            .sidebar.open { transform: translateX(0); }
+            .main-content { margin-right: 0; }
+            .menu-toggle { display: block; }
         }
-
         @media (max-width: 600px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-            .modern-header {
-                flex-direction: column;
-                align-items: center;
-                gap: 15px;
-            }
-            .header-side {
-                width: 100%;
-                text-align: center !important;
-            }
-            .header-left {
-                direction: ltr;
-            }
-            .invoice-main-title {
-                font-size: 28px;
-            }
-            .invoice-footer-area {
-                flex-direction: column;
-                align-items: center;
-            }
-            .items-table {
-                font-size: 12px;
-            }
-            .items-table th,
-            .items-table td {
-                padding: 5px 3px;
-            }
-            .items-table input {
-                padding: 5px;
-                font-size: 12px;
-            }
+            .form-grid { grid-template-columns: 1fr; }
+            .items-table { font-size: 12px; }
+            .items-table th, .items-table td { padding: 5px 3px; }
+            .items-table input { padding: 5px; font-size: 12px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ============================================
-         الشريط الجانبي - قائمة الفواتير المحفوظة
-         ============================================ -->
+    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>📋 الفواتير المحفوظة</h2>
@@ -757,11 +520,8 @@
         </div>
     </aside>
 
-    <!-- ============================================
-         المحتوى الرئيسي
-         ============================================ -->
+    <!-- MAIN CONTENT -->
     <main class="main-content">
-        <!-- شريط علوي -->
         <div class="top-bar">
             <div style="display:flex; align-items:center; gap:10px;">
                 <button class="menu-toggle no-print" onclick="toggleSidebar()">☰</button>
@@ -770,19 +530,17 @@
             <button class="theme-toggle no-print" onclick="toggleTheme()">🌙 الوضع الليلي</button>
         </div>
 
-        <!-- ============================================
-             قسم بيانات البائع
-             ============================================ -->
+        <!-- SELLER DATA CARD -->
         <div class="card no-print">
             <div class="card-title">🏢 بيانات البائع</div>
             <div class="form-grid">
                 <div class="form-group">
                     <label>اسم البائع / المنشأة</label>
-                    <input type="text" id="sellerName" placeholder="مثال: مؤسسة أعمدة الوطن">
+                    <input type="text" id="sellerName" placeholder="مؤسسة أعمدة الوطن">
                 </div>
                 <div class="form-group">
                     <label>الرقم الضريبي (VAT)</label>
-                    <input type="text" id="sellerVAT" placeholder="مثال: 300012345600003" maxlength="15">
+                    <input type="text" id="sellerVAT" placeholder="300012345600003" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label>الرقم الموحد</label>
@@ -795,9 +553,7 @@
             </div>
         </div>
 
-        <!-- ============================================
-             قسم بيانات العميل والفاتورة
-             ============================================ -->
+        <!-- INVOICE DATA CARD -->
         <div class="card no-print">
             <div class="card-title">👤 بيانات الفاتورة والعميل</div>
             <div class="form-grid">
@@ -824,9 +580,7 @@
             </div>
         </div>
 
-        <!-- ============================================
-             جدول بنود الفاتورة
-             ============================================ -->
+        <!-- ITEMS TABLE -->
         <div class="card no-print">
             <div class="card-title">📦 بنود الفاتورة</div>
             <div style="overflow-x:auto;">
@@ -844,38 +598,22 @@
                             <th style="width:40px;"></th>
                         </tr>
                     </thead>
-                    <tbody id="itemsBody">
-                        <!-- يتم إضافة البنود ديناميكياً -->
-                    </tbody>
+                    <tbody id="itemsBody"></tbody>
                 </table>
             </div>
-
             <div class="actions-bar">
                 <button class="btn btn-accent" onclick="addItem()">+ إضافة منتج</button>
             </div>
-
-            <!-- الملخص المالي (خارج المعاينة) -->
             <div class="summary-box">
                 <table class="summary-table">
-                    <tr>
-                        <td>إجمالي المبلغ قبل الضريبة</td>
-                        <td id="sumSubtotal">0.00 ر.س</td>
-                    </tr>
-                    <tr>
-                        <td>إجمالي الضريبة</td>
-                        <td id="sumTax">0.00 ر.س</td>
-                    </tr>
-                    <tr>
-                        <td>الإجمالي الكلي شامل الضريبة</td>
-                        <td id="sumTotal">0.00 ر.س</td>
-                    </tr>
+                    <tr><td>إجمالي المبلغ قبل الضريبة</td><td id="sumSubtotal">0.00 ر.س</td></tr>
+                    <tr><td>إجمالي الضريبة</td><td id="sumTax">0.00 ر.س</td></tr>
+                    <tr><td>الإجمالي الكلي شامل الضريبة</td><td id="sumTotal">0.00 ر.س</td></tr>
                 </table>
             </div>
         </div>
 
-        <!-- ============================================
-             ملاحظات الفاتورة
-             ============================================ -->
+        <!-- NOTES CARD -->
         <div class="card no-print">
             <div class="card-title">📝 ملاحظات</div>
             <div class="form-group">
@@ -883,15 +621,11 @@
             </div>
         </div>
 
-        <!-- ============================================
-             قسم QR Code والتحقق (بطاقة الإدخال)
-             ============================================ -->
+        <!-- QR VERIFICATION CARD -->
         <div class="card no-print" id="qrCard" style="display:none;">
             <div class="card-title">📱 رمز الاستجابة السريع (QR Code) - معيار ZATCA</div>
             <div class="qr-section">
-                <div id="qrcode-container">
-                    <div id="qrcode"></div>
-                </div>
+                <div id="qrcode-container"><div id="qrcode"></div></div>
                 <div class="base64-display">
                     <label>محتوى Base64 المشفر (TLV) - للتحقق:</label>
                     <textarea id="base64Output" readonly></textarea>
@@ -899,9 +633,7 @@
             </div>
         </div>
 
-        <!-- ============================================
-             أزرار الإجراءات
-             ============================================ -->
+        <!-- ACTION BUTTONS -->
         <div class="actions-bar no-print">
             <button class="btn btn-primary" onclick="generateInvoice()">🧾 توليد الفاتورة</button>
             <button class="btn btn-warning" onclick="saveDraft()">💾 حفظ كمسودة</button>
@@ -909,577 +641,524 @@
             <button class="btn btn-outline" onclick="exportPDF()">📥 تصدير PDF</button>
         </div>
 
-        <!-- ============================================
-             معاينة الفاتورة (التصميم الاحترافي الجديد)
-             ============================================ -->
+        <!-- INVOICE PREVIEW (PROFESSIONAL A4) -->
         <div id="invoice-preview">
             <div class="invoice-page" id="invoicePage">
-                <!-- الهيدر الحديث -->
-                <div class="modern-header">
-                    <!-- English -->
-                    <div class="header-side header-left">
-                        <h3 id="previewSellerNameEn">Kingdom of Saudi Arabia</h3>
-                        <p>Kingdom of Saudi Arabia</p>
-                        <p>VAT number <span id="previewSellerVATEn"></span></p>
-                        <p>Unified number <span id="previewSellerUnifiedEn"></span></p>
-                    </div>
 
-                    <!-- Arabic -->
-                    <div class="header-side header-right">
-                        <h3 id="previewSellerNameAr"></h3>
-                        <p>المملكة العربية السعودية</p>
-                        <p>رقم التسجيل الضريبي <span id="previewSellerVATAr"></span></p>
-                        <p>الرقم الموحد <span id="previewSellerUnifiedAr"></span></p>
+                <!-- HEADER -->
+                <div class="invoice-top-header">
+                    <div class="invoice-top-left">
+                        <div class="invoice-company-name" id="previewSellerNameEn"></div>
+                        <div class="invoice-company-line">Kingdom of Saudi Arabia</div>
+                        <div class="invoice-company-line">VAT number <span id="previewSellerVATEn"></span></div>
+                        <div class="invoice-company-line">Unified number <span id="previewSellerUnifiedEn"></span></div>
+                    </div>
+                    <div class="invoice-top-right">
+                        <div class="invoice-company-name" id="previewSellerNameAr"></div>
+                        <div class="invoice-company-line">المملكة العربية السعودية</div>
+                        <div class="invoice-company-line">رقم التسجيل الضريبي <span id="previewSellerVATAr"></span></div>
+                        <div class="invoice-company-line">الرقم الموحد <span id="previewSellerUnifiedAr"></span></div>
                     </div>
                 </div>
 
-                <!-- العنوان الرئيسي -->
-                <div class="invoice-main-title">
-                    فاتورة ضريبية Tax Invoice
-                </div>
+                <!-- TITLE -->
+                <div class="invoice-main-title">فاتورة ضريبية Tax Invoice</div>
 
-                <!-- جدول البنود (كما هو) -->
-                <table class="preview-table">
+                <!-- INFO TABLE -->
+                <table class="invoice-info-table">
+                    <tr>
+                        <td class="info-label">العميل</td>
+                        <td id="previewBuyerName"></td>
+                        <td class="info-label">Customer</td>
+                    </tr>
+                    <tr>
+                        <td class="info-label">العنوان</td>
+                        <td id="previewBuyerAddress"></td>
+                        <td class="info-label">Address</td>
+                    </tr>
+                    <tr>
+                        <td class="info-label">رقم التسجيل الضريبي</td>
+                        <td id="previewBuyerVAT"></td>
+                        <td class="info-label">VAT number</td>
+                    </tr>
+                    <tr>
+                        <td class="info-label">رقم الفاتورة</td>
+                        <td id="previewInvoiceNum"></td>
+                        <td class="info-label">Invoice number</td>
+                    </tr>
+                    <tr>
+                        <td class="info-label">التاريخ</td>
+                        <td id="previewDate"></td>
+                        <td class="info-label">Date</td>
+                    </tr>
+                </table>
+
+                <!-- ITEMS TABLE -->
+                <table class="invoice-items-table">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>المنتج / الخدمة</th>
-                            <th>الكمية</th>
-                            <th>سعر الوحدة</th>
-                            <th>الضريبة</th>
-                            <th>قبل الضريبة</th>
-                            <th>الضريبة</th>
-                            <th>شامل الضريبة</th>
+                            <th>الوصف<br>Description</th>
+                            <th>الكمية<br>Qty</th>
+                            <th>السعر<br>Price</th>
+                            <th>المبلغ الخاضع للضريبة<br>Taxable amount</th>
+                            <th>القيمة المضافة<br>VAT amount</th>
+                            <th>المجموع<br>Line amount</th>
                         </tr>
                     </thead>
-                    <tbody id="previewItemsBody">
-                    </tbody>
+                    <tbody id="previewItemsBody"></tbody>
                 </table>
 
-                <!-- المجاميع + QR في تذييل واحد -->
-                <div class="invoice-footer-area">
-                    <div class="totals-side">
-                        <table>
-                            <tr>
-                                <td>Subtotal المجموع الفرعي</td>
-                                <td id="previewSubtotal">0.00 ر.س</td>
-                            </tr>
-                            <tr>
-                                <td>Total VAT إجمالي الضريبة</td>
-                                <td id="previewTax">0.00 ر.س</td>
-                            </tr>
-                            <tr>
-                                <td>Total المجموع شامل الضريبة</td>
-                                <td id="previewTotal">0.00 ر.س</td>
-                            </tr>
+                <!-- BOTTOM -->
+                <div class="invoice-bottom">
+                    <div class="invoice-bottom-left">
+                        <table class="invoice-totals">
+                            <tr><td>Subtotal المجموع الفرعي</td><td id="previewSubtotal"></td></tr>
+                            <tr><td>Total VAT إجمالي ضريبة القيمة المضافة</td><td id="previewTax"></td></tr>
+                            <tr><td>Total المجموع شامل الضريبة</td><td id="previewTotal"></td></tr>
                         </table>
                     </div>
-
-                    <div class="qr-side">
-                        <div id="qrcode-preview"></div>
-                        <p>This QR code complies with ZATCA requirements</p>
+                    <div class="invoice-bottom-right">
+                        <div class="invoice-qr-box">
+                            <div id="qrcode-preview"></div>
+                        </div>
+                        <div class="invoice-qr-note">
+                            تم ترميز هذا الرمز وفق متطلبات هيئة الزكاة والضريبة والفوترة الإلكترونية<br>
+                            This QR code is encoded as per ZATCA e-invoicing requirements
+                        </div>
                     </div>
                 </div>
 
-                <!-- ملاحظات -->
-                <div class="preview-notes" id="previewNotes" style="display:none;">
-                    <strong>ملاحظات:</strong> <span id="previewNotesText"></span>
+                <!-- NOTES -->
+                <div class="invoice-notes-box" id="previewNotes" style="display:none;">
+                    <strong>ملاحظات:</strong>
+                    <span id="previewNotesText"></span>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- عنصر Toast للإشعارات -->
     <div class="toast" id="toast"></div>
 
-    <!-- ============================================
-         JavaScript - المنطق الرئيسي
-         ============================================ -->
     <script>
-    // ============================================
-    // متغيرات عامة
-    // ============================================
-    let itemCount = 0;
-    let currentInvoiceId = null;
-    let qrCodeInstance = null;
-    let qrPreviewInstance = null;
+        let itemCount = 0;
+        let currentInvoiceId = null;
 
-    // ============================================
-    // تهيئة الصفحة عند التحميل
-    // ============================================
-    document.addEventListener('DOMContentLoaded', function() {
-        loadSellerData();
-        loadSidebarList();
-        setDefaultDate();
-        generateInvoiceNumber();
-        addItem();
-        addItem();
-        loadTheme();
-    });
-
-    function setDefaultDate() {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const day = String(now.getDate()).padStart(2, '0');
-        document.getElementById('invoiceDate').value = `${year}-${month}-${day}`;
-    }
-
-    function generateInvoiceNumber() {
-        let counter = parseInt(localStorage.getItem('zatca_inv_counter') || '663');
-        counter++;
-        localStorage.setItem('zatca_inv_counter', counter.toString());
-        const numStr = counter.toString().padStart(6, '0');
-        document.getElementById('invoiceNumber').value = numStr;
-        return numStr;
-    }
-
-    function addItem() {
-        itemCount++;
-        const tbody = document.getElementById('itemsBody');
-        const tr = document.createElement('tr');
-        tr.id = `item-${itemCount}`;
-        tr.innerHTML = `
-            <td>${itemCount}</td>
-            <td><input type="text" class="item-name" placeholder="اسم المنتج أو الخدمة"></td>
-            <td><input type="number" class="item-qty" value="1" min="1" step="1" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
-            <td><input type="number" class="item-price" value="0.00" min="0" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
-            <td><input type="number" class="item-tax" value="15" min="0" max="100" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
-            <td><input type="text" class="item-subtotal read-only" value="0.00" readonly></td>
-            <td><input type="text" class="item-taxval read-only" value="0.00" readonly></td>
-            <td><input type="text" class="item-total read-only" value="0.00" readonly></td>
-            <td><button class="btn-remove-item" onclick="removeItem(this)">×</button></td>
-        `;
-        tbody.appendChild(tr);
-        calculateRow(tr.querySelector('.item-qty'));
-    }
-
-    function removeItem(btn) {
-        const tr = btn.closest('tr');
-        tr.remove();
-        renumberItems();
-        calculateTotals();
-    }
-
-    function renumberItems() {
-        const rows = document.querySelectorAll('#itemsBody tr');
-        rows.forEach((row, idx) => {
-            row.querySelector('td:first-child').textContent = idx + 1;
-        });
-        itemCount = rows.length;
-    }
-
-    function calculateRow(input) {
-        const tr = input.closest('tr');
-        const qty = parseFloat(tr.querySelector('.item-qty').value) || 0;
-        const price = parseFloat(tr.querySelector('.item-price').value) || 0;
-        const taxRate = parseFloat(tr.querySelector('.item-tax').value) || 0;
-
-        const subtotal = qty * price;
-        const taxVal = subtotal * (taxRate / 100);
-        const total = subtotal + taxVal;
-
-        tr.querySelector('.item-subtotal').value = subtotal.toFixed(2);
-        tr.querySelector('.item-taxval').value = taxVal.toFixed(2);
-        tr.querySelector('.item-total').value = total.toFixed(2);
-
-        calculateTotals();
-    }
-
-    function calculateTotals() {
-        let totalSubtotal = 0;
-        let totalTax = 0;
-        let totalWithTax = 0;
-
-        document.querySelectorAll('#itemsBody tr').forEach(tr => {
-            totalSubtotal += parseFloat(tr.querySelector('.item-subtotal').value) || 0;
-            totalTax += parseFloat(tr.querySelector('.item-taxval').value) || 0;
-            totalWithTax += parseFloat(tr.querySelector('.item-total').value) || 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSellerData();
+            loadSidebarList();
+            setDefaultDate();
+            generateInvoiceNumber();
+            addItem();
+            addItem();
+            loadTheme();
         });
 
-        document.getElementById('sumSubtotal').textContent = totalSubtotal.toFixed(2) + ' ر.س';
-        document.getElementById('sumTax').textContent = totalTax.toFixed(2) + ' ر.س';
-        document.getElementById('sumTotal').textContent = totalWithTax.toFixed(2) + ' ر.س';
-    }
-
-    function getInvoiceData() {
-        const items = [];
-        document.querySelectorAll('#itemsBody tr').forEach(tr => {
-            items.push({
-                name: tr.querySelector('.item-name').value,
-                qty: parseFloat(tr.querySelector('.item-qty').value) || 0,
-                price: parseFloat(tr.querySelector('.item-price').value) || 0,
-                taxRate: parseFloat(tr.querySelector('.item-tax').value) || 0,
-                subtotal: parseFloat(tr.querySelector('.item-subtotal').value) || 0,
-                taxVal: parseFloat(tr.querySelector('.item-taxval').value) || 0,
-                total: parseFloat(tr.querySelector('.item-total').value) || 0
-            });
-        });
-
-        const invoiceDateStr = document.getElementById('invoiceDate').value;
-        let isoDate = '';
-        if (invoiceDateStr) {
-            const d = new Date(invoiceDateStr + 'T00:00:00');
-            isoDate = d.toISOString().replace(/\.\d{3}Z$/, 'Z');
-        } else {
-            isoDate = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+        function setDefaultDate() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const d = String(now.getDate()).padStart(2, '0');
+            document.getElementById('invoiceDate').value = `${y}-${m}-${d}`;
         }
 
-        let totalSubtotal = 0, totalTax = 0, totalWithTax = 0;
-        items.forEach(i => {
-            totalSubtotal += i.subtotal;
-            totalTax += i.taxVal;
-            totalWithTax += i.total;
-        });
-
-        return {
-            id: currentInvoiceId || Date.now().toString(),
-            sellerName: document.getElementById('sellerName').value,
-            sellerVAT: document.getElementById('sellerVAT').value,
-            sellerUnified: document.getElementById('sellerUnified').value,
-            sellerAddress: document.getElementById('sellerAddress').value,
-            invoiceNumber: document.getElementById('invoiceNumber').value || ('INV-' + Date.now().toString().slice(-6)),
-            invoiceDate: invoiceDateStr,
-            invoiceDateISO: isoDate,
-            buyerName: document.getElementById('buyerName').value,
-            buyerVAT: document.getElementById('buyerVAT').value,
-            buyerAddress: document.getElementById('buyerAddress').value,
-            notes: document.getElementById('invoiceNotes').value,
-            items: items,
-            totalSubtotal: totalSubtotal,
-            totalTax: totalTax,
-            totalWithTax: totalWithTax
-        };
-    }
-
-    function encodeZATCATLV(sellerName, vatNumber, invoiceDate, totalWithTax, totalTax) {
-        function tlv(tag, value) {
-            const valueBytes = new TextEncoder().encode(value);
-            return [tag, valueBytes.length, ...valueBytes];
-        }
-        let allBytes = [];
-        allBytes = allBytes.concat(tlv(1, sellerName));
-        allBytes = allBytes.concat(tlv(2, vatNumber));
-        allBytes = allBytes.concat(tlv(3, invoiceDate));
-        allBytes = allBytes.concat(tlv(4, totalWithTax.toFixed(2)));
-        allBytes = allBytes.concat(tlv(5, totalTax.toFixed(2)));
-
-        let binaryString = '';
-        for (let i = 0; i < allBytes.length; i++) {
-            binaryString += String.fromCharCode(allBytes[i]);
-        }
-        const base64 = btoa(binaryString);
-        return base64;
-    }
-
-    function generateInvoice() {
-        const data = getInvoiceData();
-
-        if (!data.sellerName.trim()) {
-            showToast('⚠️ يرجى إدخال اسم البائع', 'var(--warning)');
-            return;
-        }
-        if (!data.sellerVAT.trim()) {
-            showToast('⚠️ يرجى إدخال الرقم الضريبي', 'var(--warning)');
-            return;
+        function generateInvoiceNumber() {
+            let counter = parseInt(localStorage.getItem('zatca_inv_counter') || '663');
+            counter++;
+            localStorage.setItem('zatca_inv_counter', counter.toString());
+            const numStr = counter.toString().padStart(6, '0');
+            document.getElementById('invoiceNumber').value = numStr;
+            return numStr;
         }
 
-        // حفظ بيانات البائع
-        saveSellerData(data.sellerName, data.sellerVAT, data.sellerUnified, data.sellerAddress);
-
-        // إنشاء QR
-        const base64String = encodeZATCATLV(
-            data.sellerName,
-            data.sellerVAT,
-            data.invoiceDateISO,
-            data.totalWithTax,
-            data.totalTax
-        );
-
-        displayQRCode(base64String, 'qrcode');
-        displayQRCode(base64String, 'qrcode-preview');
-        document.getElementById('base64Output').value = base64String;
-        document.getElementById('qrCard').style.display = 'block';
-
-        // ملء الهيدر العربي والإنجليزي
-        document.getElementById('previewSellerNameAr').textContent = data.sellerName;
-        document.getElementById('previewSellerNameEn').textContent = data.sellerName;
-        document.getElementById('previewSellerVATAr').textContent = data.sellerVAT;
-        document.getElementById('previewSellerVATEn').textContent = data.sellerVAT;
-        document.getElementById('previewSellerUnifiedAr').textContent = data.sellerUnified || '';
-        document.getElementById('previewSellerUnifiedEn').textContent = data.sellerUnified || '';
-
-        // جدول البنود
-        const previewBody = document.getElementById('previewItemsBody');
-        previewBody.innerHTML = '';
-        data.items.forEach((item, idx) => {
-            if (!item.name.trim()) return;
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${idx + 1}</td>
-                <td style="text-align:right;">${item.name}</td>
-                <td>${item.qty}</td>
-                <td>${item.price.toFixed(2)}</td>
-                <td>${item.taxRate}%</td>
-                <td>${item.subtotal.toFixed(2)}</td>
-                <td>${item.taxVal.toFixed(2)}</td>
-                <td>${item.total.toFixed(2)}</td>
-            `;
-            previewBody.appendChild(tr);
-        });
-
-        // المجاميع (في التذييل)
-        document.getElementById('previewSubtotal').textContent = data.totalSubtotal.toFixed(2) + ' ر.س';
-        document.getElementById('previewTax').textContent = data.totalTax.toFixed(2) + ' ر.س';
-        document.getElementById('previewTotal').textContent = data.totalWithTax.toFixed(2) + ' ر.س';
-
-        // الملاحظات
-        if (data.notes.trim()) {
-            document.getElementById('previewNotes').style.display = 'block';
-            document.getElementById('previewNotesText').textContent = data.notes;
-        } else {
-            document.getElementById('previewNotes').style.display = 'none';
-        }
-
-        document.getElementById('invoice-preview').style.display = 'block';
-        document.getElementById('invoice-preview').scrollIntoView({ behavior: 'smooth' });
-
-        showToast('✅ تم توليد الفاتورة بنجاح');
-    }
-
-    function displayQRCode(base64Str, containerId) {
-        const container = document.getElementById(containerId);
-        container.innerHTML = '';
-        new QRCode(container, {
-            text: base64Str,
-            width: 180,
-            height: 180,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.M
-        });
-    }
-
-    function formatDateDisplay(dateStr) {
-        if (!dateStr) return '';
-        const datePart = dateStr.split('T')[0];
-        const [year, month, day] = datePart.split('-');
-        return `${day.padStart(2,'0')}/${month.padStart(2,'0')}/${year}`;
-    }
-
-    function saveSellerData(name, vat, unified, address) {
-        localStorage.setItem('zatca_sellerName', name);
-        localStorage.setItem('zatca_sellerVAT', vat);
-        localStorage.setItem('zatca_sellerUnified', unified || '');
-        localStorage.setItem('zatca_sellerAddress', address || '');
-    }
-
-    function loadSellerData() {
-        const name = localStorage.getItem('zatca_sellerName');
-        const vat = localStorage.getItem('zatca_sellerVAT');
-        const unified = localStorage.getItem('zatca_sellerUnified');
-        const address = localStorage.getItem('zatca_sellerAddress');
-        if (name) document.getElementById('sellerName').value = name;
-        if (vat) document.getElementById('sellerVAT').value = vat;
-        if (unified) document.getElementById('sellerUnified').value = unified;
-        if (address) document.getElementById('sellerAddress').value = address;
-    }
-
-    function saveDraft() {
-        const data = getInvoiceData();
-        let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        const existingIdx = invoices.findIndex(inv => inv.id === data.id);
-        if (existingIdx >= 0) {
-            invoices[existingIdx] = data;
-        } else {
-            invoices.push(data);
-        }
-        localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
-        currentInvoiceId = data.id;
-        loadSidebarList();
-        showToast('💾 تم حفظ المسودة بنجاح');
-    }
-
-    function loadSidebarList() {
-        const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        const listEl = document.getElementById('saved-invoices-list');
-        if (invoices.length === 0) {
-            listEl.innerHTML = '<p style="text-align:center; opacity:0.6; padding:20px;">لا توجد فواتير محفوظة</p>';
-            return;
-        }
-        listEl.innerHTML = '';
-        invoices.reverse().forEach(inv => {
-            const div = document.createElement('div');
-            div.className = 'sidebar-item';
-            div.innerHTML = `
-                <button class="delete-inv" onclick="event.stopPropagation(); deleteInvoice('${inv.id}')">🗑️</button>
-                <div class="inv-num">${inv.invoiceNumber}</div>
-                <div class="inv-date">${formatDateDisplay(inv.invoiceDate)}</div>
-                <div class="inv-total">${inv.totalWithTax.toFixed(2)} ر.س</div>
-            `;
-            div.onclick = () => loadInvoice(inv.id);
-            listEl.appendChild(div);
-        });
-    }
-
-    function loadInvoice(id) {
-        const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        const inv = invoices.find(i => i.id === id);
-        if (!inv) return;
-
-        currentInvoiceId = inv.id;
-        document.getElementById('sellerName').value = inv.sellerName || '';
-        document.getElementById('sellerVAT').value = inv.sellerVAT || '';
-        document.getElementById('sellerUnified').value = inv.sellerUnified || '';
-        document.getElementById('sellerAddress').value = inv.sellerAddress || '';
-        document.getElementById('invoiceNumber').value = inv.invoiceNumber || '';
-        document.getElementById('invoiceDate').value = inv.invoiceDate || '';
-        document.getElementById('buyerName').value = inv.buyerName || '';
-        document.getElementById('buyerVAT').value = inv.buyerVAT || '';
-        document.getElementById('buyerAddress').value = inv.buyerAddress || '';
-        document.getElementById('invoiceNotes').value = inv.notes || '';
-
-        const tbody = document.getElementById('itemsBody');
-        tbody.innerHTML = '';
-        itemCount = 0;
-        inv.items.forEach(item => {
+        function addItem() {
             itemCount++;
+            const tbody = document.getElementById('itemsBody');
             const tr = document.createElement('tr');
             tr.id = `item-${itemCount}`;
             tr.innerHTML = `
                 <td>${itemCount}</td>
-                <td><input type="text" class="item-name" value="${item.name}"></td>
-                <td><input type="number" class="item-qty" value="${item.qty}" min="1" step="1" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
-                <td><input type="number" class="item-price" value="${item.price}" min="0" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
-                <td><input type="number" class="item-tax" value="${item.taxRate}" min="0" max="100" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
-                <td><input type="text" class="item-subtotal read-only" value="${item.subtotal.toFixed(2)}" readonly></td>
-                <td><input type="text" class="item-taxval read-only" value="${item.taxVal.toFixed(2)}" readonly></td>
-                <td><input type="text" class="item-total read-only" value="${item.total.toFixed(2)}" readonly></td>
+                <td><input type="text" class="item-name" placeholder="اسم المنتج أو الخدمة"></td>
+                <td><input type="number" class="item-qty" value="1" min="1" step="1" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="item-price" value="0.00" min="0" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
+                <td><input type="number" class="item-tax" value="15" min="0" max="100" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
+                <td><input type="text" class="item-subtotal read-only" value="0.00" readonly></td>
+                <td><input type="text" class="item-taxval read-only" value="0.00" readonly></td>
+                <td><input type="text" class="item-total read-only" value="0.00" readonly></td>
                 <td><button class="btn-remove-item" onclick="removeItem(this)">×</button></td>
             `;
             tbody.appendChild(tr);
-        });
-        calculateTotals();
-
-        if (window.innerWidth <= 992) {
-            document.getElementById('sidebar').classList.remove('open');
-        }
-        showToast('📂 تم تحميل الفاتورة');
-    }
-
-    function deleteInvoice(id) {
-        if (!confirm('هل أنت متأكد من حذف هذه الفاتورة؟')) return;
-        let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        invoices = invoices.filter(i => i.id !== id);
-        localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
-        loadSidebarList();
-        if (currentInvoiceId === id) {
-            currentInvoiceId = null;
-        }
-        showToast('🗑️ تم حذف الفاتورة');
-    }
-
-    function newInvoice() {
-        currentInvoiceId = null;
-        generateInvoiceNumber();
-        document.getElementById('buyerName').value = '';
-        document.getElementById('buyerVAT').value = '';
-        document.getElementById('buyerAddress').value = '';
-        document.getElementById('invoiceNotes').value = '';
-        setDefaultDate();
-
-        document.getElementById('itemsBody').innerHTML = '';
-        itemCount = 0;
-        addItem();
-        addItem();
-        calculateTotals();
-
-        document.getElementById('invoice-preview').style.display = 'none';
-        document.getElementById('qrCard').style.display = 'none';
-
-        if (window.innerWidth <= 992) {
-            document.getElementById('sidebar').classList.remove('open');
-        }
-        showToast('📝 فاتورة جديدة');
-    }
-
-    function printInvoice() {
-        if (document.getElementById('invoice-preview').style.display !== 'block') {
-            showToast('⚠️ يرجى توليد الفاتورة أولاً');
-            return;
-        }
-        window.print();
-    }
-
-    async function exportPDF() {
-        if (document.getElementById('invoice-preview').style.display !== 'block') {
-            showToast('⚠️ يرجى توليد الفاتورة أولاً');
-            return;
+            calculateRow(tr.querySelector('.item-qty'));
         }
 
-        showToast('⏳ جاري إنشاء ملف PDF...');
-        try {
-            const element = document.getElementById('invoicePage');
-            const canvas = await html2canvas(element, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: '#ffffff'
+        function removeItem(btn) {
+            btn.closest('tr').remove();
+            renumberItems();
+            calculateTotals();
+        }
+
+        function renumberItems() {
+            const rows = document.querySelectorAll('#itemsBody tr');
+            rows.forEach((row, idx) => row.querySelector('td:first-child').textContent = idx + 1);
+            itemCount = rows.length;
+        }
+
+        function calculateRow(input) {
+            const tr = input.closest('tr');
+            const qty = parseFloat(tr.querySelector('.item-qty').value) || 0;
+            const price = parseFloat(tr.querySelector('.item-price').value) || 0;
+            const taxRate = parseFloat(tr.querySelector('.item-tax').value) || 0;
+            const subtotal = qty * price;
+            const taxVal = subtotal * (taxRate / 100);
+            const total = subtotal + taxVal;
+            tr.querySelector('.item-subtotal').value = subtotal.toFixed(2);
+            tr.querySelector('.item-taxval').value = taxVal.toFixed(2);
+            tr.querySelector('.item-total').value = total.toFixed(2);
+            calculateTotals();
+        }
+
+        function calculateTotals() {
+            let totalSub = 0, totalTax = 0, totalWith = 0;
+            document.querySelectorAll('#itemsBody tr').forEach(tr => {
+                totalSub += parseFloat(tr.querySelector('.item-subtotal').value) || 0;
+                totalTax += parseFloat(tr.querySelector('.item-taxval').value) || 0;
+                totalWith += parseFloat(tr.querySelector('.item-total').value) || 0;
+            });
+            document.getElementById('sumSubtotal').textContent = totalSub.toFixed(2) + ' ر.س';
+            document.getElementById('sumTax').textContent = totalTax.toFixed(2) + ' ر.س';
+            document.getElementById('sumTotal').textContent = totalWith.toFixed(2) + ' ر.س';
+        }
+
+        function getInvoiceData() {
+            const items = [];
+            document.querySelectorAll('#itemsBody tr').forEach(tr => {
+                items.push({
+                    name: tr.querySelector('.item-name').value,
+                    qty: parseFloat(tr.querySelector('.item-qty').value) || 0,
+                    price: parseFloat(tr.querySelector('.item-price').value) || 0,
+                    taxRate: parseFloat(tr.querySelector('.item-tax').value) || 0,
+                    subtotal: parseFloat(tr.querySelector('.item-subtotal').value) || 0,
+                    taxVal: parseFloat(tr.querySelector('.item-taxval').value) || 0,
+                    total: parseFloat(tr.querySelector('.item-total').value) || 0
+                });
+            });
+            const invDateStr = document.getElementById('invoiceDate').value;
+            let isoDate = '';
+            if (invDateStr) {
+                const d = new Date(invDateStr + 'T00:00:00');
+                isoDate = d.toISOString().replace(/\.\d{3}Z$/, 'Z');
+            } else {
+                isoDate = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+            }
+            let totalSub = 0, totalTax = 0, totalWith = 0;
+            items.forEach(i => { totalSub += i.subtotal; totalTax += i.taxVal; totalWith += i.total; });
+            return {
+                id: currentInvoiceId || Date.now().toString(),
+                sellerName: document.getElementById('sellerName').value,
+                sellerVAT: document.getElementById('sellerVAT').value,
+                sellerUnified: document.getElementById('sellerUnified').value,
+                sellerAddress: document.getElementById('sellerAddress').value,
+                invoiceNumber: document.getElementById('invoiceNumber').value,
+                invoiceDate: invDateStr,
+                invoiceDateISO: isoDate,
+                buyerName: document.getElementById('buyerName').value,
+                buyerVAT: document.getElementById('buyerVAT').value,
+                buyerAddress: document.getElementById('buyerAddress').value,
+                notes: document.getElementById('invoiceNotes').value,
+                items: items,
+                totalSubtotal: totalSub,
+                totalTax: totalTax,
+                totalWithTax: totalWith
+            };
+        }
+
+        function encodeZATCATLV(sellerName, vatNumber, invoiceDate, totalWithTax, totalTax) {
+            function tlv(tag, value) {
+                const bytes = new TextEncoder().encode(value);
+                return [tag, bytes.length, ...bytes];
+            }
+            let allBytes = [];
+            allBytes = allBytes.concat(tlv(1, sellerName));
+            allBytes = allBytes.concat(tlv(2, vatNumber));
+            allBytes = allBytes.concat(tlv(3, invoiceDate));
+            allBytes = allBytes.concat(tlv(4, totalWithTax.toFixed(2)));
+            allBytes = allBytes.concat(tlv(5, totalTax.toFixed(2)));
+            let binary = '';
+            for (let i = 0; i < allBytes.length; i++) binary += String.fromCharCode(allBytes[i]);
+            return btoa(binary);
+        }
+
+        function generateInvoice() {
+            const data = getInvoiceData();
+            if (!data.sellerName.trim()) { showToast('⚠️ يرجى إدخال اسم البائع', 'var(--warning)'); return; }
+            if (!data.sellerVAT.trim()) { showToast('⚠️ يرجى إدخال الرقم الضريبي', 'var(--warning)'); return; }
+
+            saveSellerData(data.sellerName, data.sellerVAT, data.sellerUnified, data.sellerAddress);
+
+            const base64 = encodeZATCATLV(data.sellerName, data.sellerVAT, data.invoiceDateISO, data.totalWithTax, data.totalTax);
+            displayQRCode(base64, 'qrcode');
+            displayQRCode(base64, 'qrcode-preview');
+            document.getElementById('base64Output').value = base64;
+            document.getElementById('qrCard').style.display = 'block';
+
+            document.getElementById('previewSellerNameAr').textContent = data.sellerName;
+            document.getElementById('previewSellerNameEn').textContent = data.sellerName;
+            document.getElementById('previewSellerVATAr').textContent = data.sellerVAT;
+            document.getElementById('previewSellerVATEn').textContent = data.sellerVAT;
+            document.getElementById('previewSellerUnifiedAr').textContent = data.sellerUnified || '';
+            document.getElementById('previewSellerUnifiedEn').textContent = data.sellerUnified || '';
+
+            document.getElementById('previewBuyerName').textContent = data.buyerName || 'غير محدد';
+            document.getElementById('previewBuyerAddress').textContent = data.buyerAddress || 'غير محدد';
+            document.getElementById('previewBuyerVAT').textContent = data.buyerVAT || 'غير محدد';
+            document.getElementById('previewInvoiceNum').textContent = data.invoiceNumber;
+            document.getElementById('previewDate').textContent = formatDateDisplay(data.invoiceDate);
+
+            const previewBody = document.getElementById('previewItemsBody');
+            previewBody.innerHTML = '';
+            data.items.forEach((item, idx) => {
+                if (!item.name.trim()) return;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${idx + 1}</td>
+                    <td class="desc">${item.name}</td>
+                    <td>${item.qty}</td>
+                    <td>${item.price.toFixed(2)}</td>
+                    <td>${item.subtotal.toFixed(2)}</td>
+                    <td>${item.taxVal.toFixed(2)}<br>${item.taxRate}%</td>
+                    <td>${item.total.toFixed(2)}</td>
+                `;
+                previewBody.appendChild(tr);
             });
 
-            const imgData = canvas.toDataURL('image/png');
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'mm', 'a4');
+            document.getElementById('previewSubtotal').textContent = data.totalSubtotal.toFixed(2) + ' ر.س';
+            document.getElementById('previewTax').textContent = data.totalTax.toFixed(2) + ' ر.س';
+            document.getElementById('previewTotal').textContent = data.totalWithTax.toFixed(2) + ' ر.س';
 
-            const pageWidth = pdf.internal.pageSize.getWidth();
-            const pageHeight = pdf.internal.pageSize.getHeight();
-            const margin = 5;
-            const imgWidth = pageWidth - (margin * 2);
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-            if (imgHeight <= pageHeight - (margin * 2)) {
-                pdf.addImage(imgData, 'PNG', margin, margin, imgWidth, imgHeight);
+            if (data.notes.trim()) {
+                document.getElementById('previewNotes').style.display = 'block';
+                document.getElementById('previewNotesText').textContent = data.notes;
             } else {
-                const scaledHeight = pageHeight - (margin * 2);
-                const scaledWidth = (canvas.width * scaledHeight) / canvas.height;
-                const xOffset = margin + (imgWidth - scaledWidth) / 2;
-                pdf.addImage(imgData, 'PNG', xOffset, margin, scaledWidth, scaledHeight);
+                document.getElementById('previewNotes').style.display = 'none';
             }
 
-            const data = getInvoiceData();
-            pdf.save(`فاتورة_${data.invoiceNumber}.pdf`);
-            showToast('✅ تم تصدير PDF بنجاح');
-        } catch (err) {
-            console.error(err);
-            showToast('❌ خطأ في تصدير PDF');
+            document.getElementById('invoice-preview').style.display = 'block';
+            document.getElementById('invoice-preview').scrollIntoView({ behavior: 'smooth' });
+            showToast('✅ تم توليد الفاتورة بنجاح');
         }
-    }
 
-    function toggleTheme() {
-        const body = document.body;
-        const isDark = body.getAttribute('data-theme') === 'dark';
-        body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        localStorage.setItem('zatca_theme', isDark ? 'light' : 'dark');
-        document.querySelector('.theme-toggle').textContent = isDark ? '🌙 الوضع الليلي' : '☀️ الوضع الفاتح';
-    }
+        function displayQRCode(base64Str, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            const tempDiv = document.createElement('div');
+            new QRCode(tempDiv, {
+                text: base64Str,
+                width: 140,
+                height: 140,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            setTimeout(() => {
+                const canvas = tempDiv.querySelector('canvas');
+                if (canvas) {
+                    const img = document.createElement('img');
+                    img.src = canvas.toDataURL('image/png');
+                    img.width = 140;
+                    img.height = 140;
+                    container.innerHTML = '';
+                    container.appendChild(img);
+                }
+            }, 100);
+        }
 
-    function loadTheme() {
-        const theme = localStorage.getItem('zatca_theme') || 'light';
-        document.body.setAttribute('data-theme', theme);
-        document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️ الوضع الفاتح' : '🌙 الوضع الليلي';
-    }
+        function formatDateDisplay(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split('T')[0].split('-');
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
 
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
-    }
+        function saveSellerData(name, vat, unified, address) {
+            localStorage.setItem('zatca_sellerName', name);
+            localStorage.setItem('zatca_sellerVAT', vat);
+            localStorage.setItem('zatca_sellerUnified', unified || '');
+            localStorage.setItem('zatca_sellerAddress', address || '');
+        }
 
-    function showToast(message, bgColor) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        if (bgColor) toast.style.background = bgColor;
-        else toast.style.background = 'var(--accent)';
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2500);
-    }
+        function loadSellerData() {
+            const name = localStorage.getItem('zatca_sellerName');
+            const vat = localStorage.getItem('zatca_sellerVAT');
+            const unified = localStorage.getItem('zatca_sellerUnified');
+            const address = localStorage.getItem('zatca_sellerAddress');
+            if (name) document.getElementById('sellerName').value = name;
+            if (vat) document.getElementById('sellerVAT').value = vat;
+            if (unified) document.getElementById('sellerUnified').value = unified;
+            if (address) document.getElementById('sellerAddress').value = address;
+        }
+
+        function saveDraft() {
+            const data = getInvoiceData();
+            let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
+            const idx = invoices.findIndex(inv => inv.id === data.id);
+            if (idx >= 0) invoices[idx] = data;
+            else invoices.push(data);
+            localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
+            currentInvoiceId = data.id;
+            loadSidebarList();
+            showToast('💾 تم حفظ المسودة بنجاح');
+        }
+
+        function loadSidebarList() {
+            const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
+            const listEl = document.getElementById('saved-invoices-list');
+            if (invoices.length === 0) {
+                listEl.innerHTML = '<p style="text-align:center; opacity:0.6; padding:20px;">لا توجد فواتير محفوظة</p>';
+                return;
+            }
+            listEl.innerHTML = '';
+            invoices.reverse().forEach(inv => {
+                const div = document.createElement('div');
+                div.className = 'sidebar-item';
+                div.innerHTML = `
+                    <button class="delete-inv" onclick="event.stopPropagation(); deleteInvoice('${inv.id}')">🗑️</button>
+                    <div class="inv-num">${inv.invoiceNumber}</div>
+                    <div class="inv-date">${formatDateDisplay(inv.invoiceDate)}</div>
+                    <div class="inv-total">${inv.totalWithTax.toFixed(2)} ر.س</div>
+                `;
+                div.onclick = () => loadInvoice(inv.id);
+                listEl.appendChild(div);
+            });
+        }
+
+        function loadInvoice(id) {
+            const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
+            const inv = invoices.find(i => i.id === id);
+            if (!inv) return;
+            currentInvoiceId = inv.id;
+            document.getElementById('sellerName').value = inv.sellerName || '';
+            document.getElementById('sellerVAT').value = inv.sellerVAT || '';
+            document.getElementById('sellerUnified').value = inv.sellerUnified || '';
+            document.getElementById('sellerAddress').value = inv.sellerAddress || '';
+            document.getElementById('invoiceNumber').value = inv.invoiceNumber || '';
+            document.getElementById('invoiceDate').value = inv.invoiceDate || '';
+            document.getElementById('buyerName').value = inv.buyerName || '';
+            document.getElementById('buyerVAT').value = inv.buyerVAT || '';
+            document.getElementById('buyerAddress').value = inv.buyerAddress || '';
+            document.getElementById('invoiceNotes').value = inv.notes || '';
+
+            const tbody = document.getElementById('itemsBody');
+            tbody.innerHTML = '';
+            itemCount = 0;
+            inv.items.forEach(item => {
+                itemCount++;
+                const tr = document.createElement('tr');
+                tr.id = `item-${itemCount}`;
+                tr.innerHTML = `
+                    <td>${itemCount}</td>
+                    <td><input type="text" class="item-name" value="${item.name}"></td>
+                    <td><input type="number" class="item-qty" value="${item.qty}" min="1" step="1" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
+                    <td><input type="number" class="item-price" value="${item.price}" min="0" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
+                    <td><input type="number" class="item-tax" value="${item.taxRate}" min="0" max="100" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
+                    <td><input type="text" class="item-subtotal read-only" value="${item.subtotal.toFixed(2)}" readonly></td>
+                    <td><input type="text" class="item-taxval read-only" value="${item.taxVal.toFixed(2)}" readonly></td>
+                    <td><input type="text" class="item-total read-only" value="${item.total.toFixed(2)}" readonly></td>
+                    <td><button class="btn-remove-item" onclick="removeItem(this)">×</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+            calculateTotals();
+            if (window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
+            showToast('📂 تم تحميل الفاتورة');
+        }
+
+        function deleteInvoice(id) {
+            if (!confirm('هل أنت متأكد من حذف هذه الفاتورة؟')) return;
+            let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
+            invoices = invoices.filter(i => i.id !== id);
+            localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
+            loadSidebarList();
+            if (currentInvoiceId === id) currentInvoiceId = null;
+            showToast('🗑️ تم حذف الفاتورة');
+        }
+
+        function newInvoice() {
+            currentInvoiceId = null;
+            generateInvoiceNumber();
+            document.getElementById('buyerName').value = '';
+            document.getElementById('buyerVAT').value = '';
+            document.getElementById('buyerAddress').value = '';
+            document.getElementById('invoiceNotes').value = '';
+            setDefaultDate();
+            document.getElementById('itemsBody').innerHTML = '';
+            itemCount = 0;
+            addItem(); addItem();
+            calculateTotals();
+            document.getElementById('invoice-preview').style.display = 'none';
+            document.getElementById('qrCard').style.display = 'none';
+            if (window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
+            showToast('📝 فاتورة جديدة');
+        }
+
+        function printInvoice() {
+            if (document.getElementById('invoice-preview').style.display !== 'block') {
+                showToast('⚠️ يرجى توليد الفاتورة أولاً');
+                return;
+            }
+            window.print();
+        }
+
+        async function exportPDF() {
+            if (document.getElementById('invoice-preview').style.display !== 'block') {
+                showToast('⚠️ يرجى توليد الفاتورة أولاً');
+                return;
+            }
+            showToast('⏳ جاري إنشاء ملف PDF...');
+            try {
+                const element = document.getElementById('invoicePage');
+                const canvas = await html2canvas(element, {
+                    scale: 3,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+                const imgData = canvas.toDataURL('image/jpeg', 1.0);
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+                const data = getInvoiceData();
+                pdf.save(`فاتورة_${data.invoiceNumber}.pdf`);
+                showToast('✅ تم تصدير PDF بنجاح');
+            } catch (err) {
+                console.error(err);
+                showToast('❌ حدث خطأ أثناء إنشاء PDF');
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('zatca_theme', isDark ? 'light' : 'dark');
+            document.querySelector('.theme-toggle').textContent = isDark ? '🌙 الوضع الليلي' : '☀️ الوضع الفاتح';
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('zatca_theme') || 'light';
+            document.body.setAttribute('data-theme', theme);
+            document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️ الوضع الفاتح' : '🌙 الوضع الليلي';
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function showToast(message, bgColor) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            if (bgColor) toast.style.background = bgColor;
+            else toast.style.background = 'var(--accent)';
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
     </script>
 </body>
 </html>
