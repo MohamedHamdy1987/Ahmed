@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الفوترة الإلكترونية - ZATCA</title>
+    <title>نظام الفوترة الإلكترونية - ZATCA (نسخة متكاملة)</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.2/moment-hijri.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
@@ -93,12 +91,17 @@
             cursor: pointer;
             transition: background 0.2s;
             border-right: 3px solid transparent;
+            position: relative;
         }
         .sidebar-item:hover { background: rgba(255,255,255,0.1); border-right-color: var(--primary-light); }
         .sidebar-item .inv-num { font-weight: 700; font-size: 14px; }
         .sidebar-item .inv-date { font-size: 11px; opacity: 0.7; }
         .sidebar-item .inv-total { font-size: 12px; color: #27ae60; font-weight: 600; }
-        .sidebar-item .delete-inv { float: left; background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 14px; padding: 0 5px; }
+        .sidebar-item .delete-inv { 
+            position: absolute; left: 10px; top: 10px;
+            background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px; 
+            padding: 0 5px; font-weight: bold;
+        }
         .sidebar-footer { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
 
         .main-content {
@@ -270,9 +273,6 @@
             direction: ltr;
         }
 
-        /* ============================================
-           PROFESSIONAL A4 INVOICE LAYOUT (UPDATED)
-           ============================================ */
         #invoice-preview {
             display: none;
             margin-top: 25px;
@@ -290,7 +290,6 @@
             position: relative;
         }
 
-        /* NEW FLEX HEADER – arabic right, english left with space */
         .invoice-top-header {
             display: flex;
             justify-content: space-between;
@@ -303,7 +302,7 @@
 
         .invoice-top-left,
         .invoice-top-right {
-            width: 36%;
+            width: 45%;
         }
 
         .invoice-top-left {
@@ -346,7 +345,6 @@
             margin: 18px 0 22px;
         }
 
-        /* fixed table layouts */
         .invoice-info-table {
             width: 100%;
             border-collapse: collapse;
@@ -358,13 +356,22 @@
             border: 1px solid #d9d9d9;
             padding: 7px 10px;
             font-size: 13px;
+            vertical-align: middle;
         }
 
-        .info-label {
+        .info-cell-combined {
+            background: #fafafa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-weight: 700;
             color: #1d2f6f;
-            width: 33%;
-            background: #fafafa;
+            border: none;
+        }
+
+        .info-value-cell {
+            text-align: center;
+            font-weight: 600;
         }
 
         .invoice-items-table {
@@ -395,12 +402,6 @@
         .invoice-items-table .desc {
             text-align: right;
             padding-right: 12px;
-        }
-
-        /* EQUAL COLUMN WIDTHS – all 7 columns exactly equal (100/7 ≈ 14.28%) */
-        .invoice-items-table th,
-        .invoice-items-table td {
-            width: 14.28%;
         }
 
         .invoice-bottom {
@@ -478,12 +479,9 @@
                 box-shadow: none;
                 padding: 10mm;
             }
-            .sidebar, .top-bar, .actions-bar, .no-print { display: none !important; }
+            .sidebar, .top-bar, .actions-bar, .no-print, .card { display: none !important; }
         }
 
-        /* ============================================
-           RESPONSIVE & TOAST
-           ============================================ */
         .toast {
             position: fixed;
             top: 20px;
@@ -516,7 +514,6 @@
 </head>
 <body>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>📋 الفواتير المحفوظة</h2>
@@ -530,7 +527,6 @@
         </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="main-content">
         <div class="top-bar">
             <div style="display:flex; align-items:center; gap:10px;">
@@ -540,7 +536,6 @@
             <button class="theme-toggle no-print" onclick="toggleTheme()">🌙 الوضع الليلي</button>
         </div>
 
-        <!-- SELLER DATA CARD -->
         <div class="card no-print">
             <div class="card-title">🏢 بيانات البائع</div>
             <div class="form-grid">
@@ -563,7 +558,6 @@
             </div>
         </div>
 
-        <!-- INVOICE DATA CARD -->
         <div class="card no-print">
             <div class="card-title">👤 بيانات الفاتورة والعميل</div>
             <div class="form-grid">
@@ -590,7 +584,6 @@
             </div>
         </div>
 
-        <!-- ITEMS TABLE -->
         <div class="card no-print">
             <div class="card-title">📦 بنود الفاتورة</div>
             <div style="overflow-x:auto;">
@@ -623,7 +616,6 @@
             </div>
         </div>
 
-        <!-- NOTES CARD -->
         <div class="card no-print">
             <div class="card-title">📝 ملاحظات</div>
             <div class="form-group">
@@ -631,7 +623,6 @@
             </div>
         </div>
 
-        <!-- QR VERIFICATION CARD -->
         <div class="card no-print" id="qrCard" style="display:none;">
             <div class="card-title">📱 رمز الاستجابة السريع (QR Code) - معيار ZATCA</div>
             <div class="qr-section">
@@ -643,7 +634,6 @@
             </div>
         </div>
 
-        <!-- ACTION BUTTONS -->
         <div class="actions-bar no-print">
             <button class="btn btn-primary" onclick="generateInvoice()">🧾 توليد الفاتورة</button>
             <button class="btn btn-warning" onclick="saveDraft()">💾 حفظ كمسودة</button>
@@ -651,11 +641,9 @@
             <button class="btn btn-outline" onclick="exportPDF()">📥 تصدير PDF</button>
         </div>
 
-        <!-- INVOICE PREVIEW (PROFESSIONAL A4) -->
         <div id="invoice-preview">
             <div class="invoice-page" id="invoicePage">
 
-                <!-- HEADER -->
                 <div class="invoice-top-header">
                     <div class="invoice-top-right">
                         <div class="invoice-company-name" id="previewSellerNameAr"></div>
@@ -671,55 +659,71 @@
                     </div>
                 </div>
 
-                <!-- TITLE -->
                 <div class="invoice-main-title">فاتورة ضريبية Tax Invoice</div>
 
-                <!-- INFO TABLE -->
                 <table class="invoice-info-table">
                     <tr>
-                        <td class="info-label">العميل</td>
-                        <td id="previewBuyerName"></td>
-                        <td class="info-label">Customer</td>
+                        <td style="width: 70%;">
+                            <div class="info-cell-combined">
+                                <span>العميل</span>
+                                <span>Customer</span>
+                            </div>
+                        </td>
+                        <td id="previewBuyerName" class="info-value-cell"></td>
                     </tr>
                     <tr>
-                        <td class="info-label">العنوان</td>
-                        <td id="previewBuyerAddress"></td>
-                        <td class="info-label">Address</td>
+                        <td>
+                            <div class="info-cell-combined">
+                                <span>العنوان</span>
+                                <span>Address</span>
+                            </div>
+                        </td>
+                        <td id="previewBuyerAddress" class="info-value-cell"></td>
                     </tr>
                     <tr>
-                        <td class="info-label">رقم التسجيل الضريبي</td>
-                        <td id="previewBuyerVAT"></td>
-                        <td class="info-label">VAT number</td>
+                        <td>
+                            <div class="info-cell-combined">
+                                <span>رقم التسجيل الضريبي</span>
+                                <span>VAT number</span>
+                            </div>
+                        </td>
+                        <td id="previewBuyerVAT" class="info-value-cell"></td>
                     </tr>
                     <tr>
-                        <td class="info-label">رقم الفاتورة</td>
-                        <td id="previewInvoiceNum"></td>
-                        <td class="info-label">Invoice number</td>
+                        <td>
+                            <div class="info-cell-combined">
+                                <span>رقم الفاتورة</span>
+                                <span>Invoice number</span>
+                            </div>
+                        </td>
+                        <td id="previewInvoiceNum" class="info-value-cell"></td>
                     </tr>
                     <tr>
-                        <td class="info-label">التاريخ</td>
-                        <td id="previewDate"></td>
-                        <td class="info-label">Date</td>
+                        <td>
+                            <div class="info-cell-combined">
+                                <span>التاريخ</span>
+                                <span>Date</span>
+                            </div>
+                        </td>
+                        <td id="previewDate" class="info-value-cell"></td>
                     </tr>
                 </table>
 
-                <!-- ITEMS TABLE -->
                 <table class="invoice-items-table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>الوصف<br>Description</th>
-                            <th>الكمية<br>Qty</th>
-                            <th>السعر<br>Price</th>
-                            <th>المبلغ الخاضع للضريبة<br>Taxable amount</th>
-                            <th>القيمة المضافة<br>VAT amount</th>
-                            <th>المجموع<br>Line amount</th>
+                            <th style="width: 5%;">#</th>
+                            <th style="width: 35%;">الوصف<br>Description</th>
+                            <th style="width: 10%;">الكمية<br>Qty</th>
+                            <th style="width: 10%;">السعر<br>Price</th>
+                            <th style="width: 15%;">المبلغ الخاضع للضريبة<br>Taxable amount</th>
+                            <th style="width: 12%;">القيمة المضافة<br>VAT amount</th>
+                            <th style="width: 13%;">المجموع<br>Line amount</th>
                         </tr>
                     </thead>
                     <tbody id="previewItemsBody"></tbody>
                 </table>
 
-                <!-- BOTTOM -->
                 <div class="invoice-bottom">
                     <div class="invoice-bottom-left">
                         <table class="invoice-totals">
@@ -739,7 +743,6 @@
                     </div>
                 </div>
 
-                <!-- NOTES -->
                 <div class="invoice-notes-box" id="previewNotes" style="display:none;">
                     <strong>ملاحظات:</strong>
                     <span id="previewNotesText"></span>
@@ -882,6 +885,7 @@
             };
         }
 
+        // ZATCA TLV encoding (5 tags: seller name, VAT, timestamp, total with tax, total tax)
         function encodeZATCATLV(sellerName, vatNumber, invoiceDate, totalWithTax, totalTax) {
             function tlv(tag, value) {
                 const bytes = new TextEncoder().encode(value);
@@ -896,6 +900,35 @@
             let binary = '';
             for (let i = 0; i < allBytes.length; i++) binary += String.fromCharCode(allBytes[i]);
             return btoa(binary);
+        }
+
+        function displayQRCode(base64Str, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            const tempDiv = document.createElement('div');
+            new QRCode(tempDiv, {
+                text: base64Str,
+                width: 140,
+                height: 140,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            setTimeout(() => {
+                const canvas = tempDiv.querySelector('canvas');
+                if (canvas) {
+                    const img = document.createElement('img');
+                    img.src = canvas.toDataURL('image/png');
+                    img.width = 140;
+                    img.height = 140;
+                    container.innerHTML = '';
+                    container.appendChild(img);
+                } else {
+                    // fallback: if canvas not generated, just show the div content
+                    container.appendChild(tempDiv);
+                }
+            }, 100);
         }
 
         function generateInvoice() {
@@ -931,7 +964,7 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${idx + 1}</td>
-                    <td class="desc">${item.name}</td>
+                    <td class="desc">${escapeHtml(item.name)}</td>
                     <td>${item.qty}</td>
                     <td>${item.price.toFixed(2)}</td>
                     <td>${item.subtotal.toFixed(2)}</td>
@@ -957,34 +990,18 @@
             showToast('✅ تم توليد الفاتورة بنجاح');
         }
 
-        function displayQRCode(base64Str, containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            const tempDiv = document.createElement('div');
-            new QRCode(tempDiv, {
-                text: base64Str,
-                width: 140,
-                height: 140,
-                colorDark: '#000000',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.H
+        function escapeHtml(str) {
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
             });
-            setTimeout(() => {
-                const canvas = tempDiv.querySelector('canvas');
-                if (canvas) {
-                    const img = document.createElement('img');
-                    img.src = canvas.toDataURL('image/png');
-                    img.width = 140;
-                    img.height = 140;
-                    container.innerHTML = '';
-                    container.appendChild(img);
-                }
-            }, 100);
         }
 
         function formatDateDisplay(dateStr) {
             if (!dateStr) return '';
-            const parts = dateStr.split('T')[0].split('-');
+            const parts = dateStr.split('-');
             return `${parts[2]}/${parts[1]}/${parts[0]}`;
         }
 
@@ -1026,7 +1043,7 @@
                 return;
             }
             listEl.innerHTML = '';
-            invoices.reverse().forEach(inv => {
+            invoices.slice().reverse().forEach(inv => {
                 const div = document.createElement('div');
                 div.className = 'sidebar-item';
                 div.innerHTML = `
@@ -1065,7 +1082,7 @@
                 tr.id = `item-${itemCount}`;
                 tr.innerHTML = `
                     <td>${itemCount}</td>
-                    <td><input type="text" class="item-name" value="${item.name}"></td>
+                    <td><input type="text" class="item-name" value="${escapeHtml(item.name)}"></td>
                     <td><input type="number" class="item-qty" value="${item.qty}" min="1" step="1" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
                     <td><input type="number" class="item-price" value="${item.price}" min="0" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
                     <td><input type="number" class="item-tax" value="${item.taxRate}" min="0" max="100" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
@@ -1148,13 +1165,15 @@
             const isDark = document.body.getAttribute('data-theme') === 'dark';
             document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
             localStorage.setItem('zatca_theme', isDark ? 'light' : 'dark');
-            document.querySelector('.theme-toggle').textContent = isDark ? '🌙 الوضع الليلي' : '☀️ الوضع الفاتح';
+            const btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = isDark ? '🌙 الوضع الليلي' : '☀️ الوضع الفاتح';
         }
 
         function loadTheme() {
             const theme = localStorage.getItem('zatca_theme') || 'light';
             document.body.setAttribute('data-theme', theme);
-            document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️ الوضع الفاتح' : '🌙 الوضع الليلي';
+            const btn = document.querySelector('.theme-toggle');
+            if (btn) btn.textContent = theme === 'dark' ? '☀️ الوضع الفاتح' : '🌙 الوضع الليلي';
         }
 
         function toggleSidebar() {
@@ -1171,4 +1190,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
