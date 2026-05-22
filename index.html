@@ -397,34 +397,10 @@
             padding-right: 12px;
         }
 
-        /* FIXED COLUMN WIDTHS – the secret for a clean invoice */
-        .invoice-items-table th:nth-child(1),
-        .invoice-items-table td:nth-child(1) {
-            width: 6%;
-        }
-        .invoice-items-table th:nth-child(2),
-        .invoice-items-table td:nth-child(2) {
-            width: 24%;
-        }
-        .invoice-items-table th:nth-child(3),
-        .invoice-items-table td:nth-child(3) {
-            width: 10%;
-        }
-        .invoice-items-table th:nth-child(4),
-        .invoice-items-table td:nth-child(4) {
-            width: 12%;
-        }
-        .invoice-items-table th:nth-child(5),
-        .invoice-items-table td:nth-child(5) {
-            width: 22%;
-        }
-        .invoice-items-table th:nth-child(6),
-        .invoice-items-table td:nth-child(6) {
-            width: 16%;
-        }
-        .invoice-items-table th:nth-child(7),
-        .invoice-items-table td:nth-child(7) {
-            width: 18%;
+        /* EQUAL COLUMN WIDTHS – all 7 columns exactly equal (100/7 ≈ 14.28%) */
+        .invoice-items-table th,
+        .invoice-items-table td {
+            width: 14.28%;
         }
 
         .invoice-bottom {
