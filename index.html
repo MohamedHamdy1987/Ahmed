@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام الفوترة الإلكترونية - ZATCA (نسخة متكاملة)</title>
+    <title>نظام الفوترة الإلكترونية - ZATCA (مع QR متوافق ومحاذاة إنجليزية)</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
@@ -97,9 +97,9 @@
         .sidebar-item .inv-num { font-weight: 700; font-size: 14px; }
         .sidebar-item .inv-date { font-size: 11px; opacity: 0.7; }
         .sidebar-item .inv-total { font-size: 12px; color: #27ae60; font-weight: 600; }
-        .sidebar-item .delete-inv { 
+        .sidebar-item .delete-inv {
             position: absolute; left: 10px; top: 10px;
-            background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px; 
+            background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px;
             padding: 0 5px; font-weight: bold;
         }
         .sidebar-footer { padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); }
@@ -367,6 +367,12 @@
             font-weight: 700;
             color: #1d2f6f;
             border: none;
+        }
+        /* محاذاة النص الإنجليزي إلى أقصى اليسار */
+        .info-cell-combined span:last-child {
+            text-align: left;
+            direction: ltr;
+            margin-left: 0;
         }
 
         .info-value-cell {
@@ -842,50 +848,7 @@
             document.getElementById('sumTotal').textContent = totalWith.toFixed(2) + ' ر.س';
         }
 
-        function getInvoiceData() {
-            const items = [];
-            document.querySelectorAll('#itemsBody tr').forEach(tr => {
-                items.push({
-                    name: tr.querySelector('.item-name').value,
-                    qty: parseFloat(tr.querySelector('.item-qty').value) || 0,
-                    price: parseFloat(tr.querySelector('.item-price').value) || 0,
-                    taxRate: parseFloat(tr.querySelector('.item-tax').value) || 0,
-                    subtotal: parseFloat(tr.querySelector('.item-subtotal').value) || 0,
-                    taxVal: parseFloat(tr.querySelector('.item-taxval').value) || 0,
-                    total: parseFloat(tr.querySelector('.item-total').value) || 0
-                });
-            });
-            const invDateStr = document.getElementById('invoiceDate').value;
-            let isoDate = '';
-            if (invDateStr) {
-                const d = new Date(invDateStr + 'T00:00:00');
-                isoDate = d.toISOString().replace(/\.\d{3}Z$/, 'Z');
-            } else {
-                isoDate = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
-            }
-            let totalSub = 0, totalTax = 0, totalWith = 0;
-            items.forEach(i => { totalSub += i.subtotal; totalTax += i.taxVal; totalWith += i.total; });
-            return {
-                id: currentInvoiceId || Date.now().toString(),
-                sellerName: document.getElementById('sellerName').value,
-                sellerVAT: document.getElementById('sellerVAT').value,
-                sellerUnified: document.getElementById('sellerUnified').value,
-                sellerAddress: document.getElementById('sellerAddress').value,
-                invoiceNumber: document.getElementById('invoiceNumber').value,
-                invoiceDate: invDateStr,
-                invoiceDateISO: isoDate,
-                buyerName: document.getElementById('buyerName').value,
-                buyerVAT: document.getElementById('buyerVAT').value,
-                buyerAddress: document.getElementById('buyerAddress').value,
-                notes: document.getElementById('invoiceNotes').value,
-                items: items,
-                totalSubtotal: totalSub,
-                totalTax: totalTax,
-                totalWithTax: totalWith
-            };
-        }
-
-        // ZATCA TLV encoding (5 tags: seller name, VAT, timestamp, total with tax, total tax)
+        // ========== دالة تشفير متوافقة مع ZATCA (TLV) ==========
         function encodeZATCATLV(sellerName, vatNumber, invoiceDate, totalWithTax, totalTax) {
             function tlv(tag, value) {
                 const bytes = new TextEncoder().encode(value);
@@ -925,69 +888,89 @@
                     container.innerHTML = '';
                     container.appendChild(img);
                 } else {
-                    // fallback: if canvas not generated, just show the div content
                     container.appendChild(tempDiv);
                 }
             }, 100);
         }
 
         function generateInvoice() {
-            const data = getInvoiceData();
-            if (!data.sellerName.trim()) { showToast('⚠️ يرجى إدخال اسم البائع', 'var(--warning)'); return; }
-            if (!data.sellerVAT.trim()) { showToast('⚠️ يرجى إدخال الرقم الضريبي', 'var(--warning)'); return; }
+            const sellerName = document.getElementById('sellerName').value || 'مؤسسة أعمدة الوطن';
+            const sellerVAT = document.getElementById('sellerVAT').value || '300012345600003';
+            const sellerUnified = document.getElementById('sellerUnified').value || '7016971173';
+            const invNum = document.getElementById('invoiceNumber').value;
+            const invDate = document.getElementById('invoiceDate').value;
+            const buyerName = document.getElementById('buyerName').value || 'عميل نقدي';
+            const buyerVAT = document.getElementById('buyerVAT').value || 'غير مسجل';
+            const buyerAddress = document.getElementById('buyerAddress').value || '-';
+            const notes = document.getElementById('invoiceNotes').value;
 
-            saveSellerData(data.sellerName, data.sellerVAT, data.sellerUnified, data.sellerAddress);
+            // تحديث المعاينة
+            document.getElementById('previewSellerNameAr').textContent = sellerName;
+            document.getElementById('previewSellerNameEn').textContent = sellerName;
+            document.getElementById('previewSellerVATAr').textContent = sellerVAT;
+            document.getElementById('previewSellerVATEn').textContent = sellerVAT;
+            document.getElementById('previewSellerUnifiedAr').textContent = sellerUnified;
+            document.getElementById('previewSellerUnifiedEn').textContent = sellerUnified;
 
-            const base64 = encodeZATCATLV(data.sellerName, data.sellerVAT, data.invoiceDateISO, data.totalWithTax, data.totalTax);
-            displayQRCode(base64, 'qrcode');
-            displayQRCode(base64, 'qrcode-preview');
-            document.getElementById('base64Output').value = base64;
-            document.getElementById('qrCard').style.display = 'block';
-
-            document.getElementById('previewSellerNameAr').textContent = data.sellerName;
-            document.getElementById('previewSellerNameEn').textContent = data.sellerName;
-            document.getElementById('previewSellerVATAr').textContent = data.sellerVAT;
-            document.getElementById('previewSellerVATEn').textContent = data.sellerVAT;
-            document.getElementById('previewSellerUnifiedAr').textContent = data.sellerUnified || '';
-            document.getElementById('previewSellerUnifiedEn').textContent = data.sellerUnified || '';
-
-            document.getElementById('previewBuyerName').textContent = data.buyerName || 'غير محدد';
-            document.getElementById('previewBuyerAddress').textContent = data.buyerAddress || 'غير محدد';
-            document.getElementById('previewBuyerVAT').textContent = data.buyerVAT || 'غير محدد';
-            document.getElementById('previewInvoiceNum').textContent = data.invoiceNumber;
-            document.getElementById('previewDate').textContent = formatDateDisplay(data.invoiceDate);
+            document.getElementById('previewBuyerName').textContent = buyerName;
+            document.getElementById('previewBuyerAddress').textContent = buyerAddress;
+            document.getElementById('previewBuyerVAT').textContent = buyerVAT;
+            document.getElementById('previewInvoiceNum').textContent = invNum;
+            document.getElementById('previewDate').textContent = invDate;
 
             const previewBody = document.getElementById('previewItemsBody');
             previewBody.innerHTML = '';
-            data.items.forEach((item, idx) => {
-                if (!item.name.trim()) return;
+            let totalSub = 0, totalTax = 0, totalWith = 0;
+
+            document.querySelectorAll('#itemsBody tr').forEach((row, index) => {
+                const name = row.querySelector('.item-name').value || 'منتج عام';
+                const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+                const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                const sub = parseFloat(row.querySelector('.item-subtotal').value) || 0;
+                const taxVal = parseFloat(row.querySelector('.item-taxval').value) || 0;
+                const lineTotal = parseFloat(row.querySelector('.item-total').value) || 0;
+
+                totalSub += sub;
+                totalTax += taxVal;
+                totalWith += lineTotal;
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${idx + 1}</td>
-                    <td class="desc">${escapeHtml(item.name)}</td>
-                    <td>${item.qty}</td>
-                    <td>${item.price.toFixed(2)}</td>
-                    <td>${item.subtotal.toFixed(2)}</td>
-                    <td>${item.taxVal.toFixed(2)}<br>${item.taxRate}%</td>
-                    <td>${item.total.toFixed(2)}</td>
+                    <td>${index + 1}</td>
+                    <td class="desc">${escapeHtml(name)}</td>
+                    <td>${qty}</td>
+                    <td>${price.toFixed(2)}</td>
+                    <td>${sub.toFixed(2)}</td>
+                    <td>${taxVal.toFixed(2)}</td>
+                    <td>${lineTotal.toFixed(2)}</td>
                 `;
                 previewBody.appendChild(tr);
             });
 
-            document.getElementById('previewSubtotal').textContent = data.totalSubtotal.toFixed(2) + ' ر.س';
-            document.getElementById('previewTax').textContent = data.totalTax.toFixed(2) + ' ر.س';
-            document.getElementById('previewTotal').textContent = data.totalWithTax.toFixed(2) + ' ر.س';
+            document.getElementById('previewSubtotal').textContent = totalSub.toFixed(2) + ' ر.س';
+            document.getElementById('previewTax').textContent = totalTax.toFixed(2) + ' ر.س';
+            document.getElementById('previewTotal').textContent = totalWith.toFixed(2) + ' ر.س';
 
-            if (data.notes.trim()) {
-                document.getElementById('previewNotes').style.display = 'block';
-                document.getElementById('previewNotesText').textContent = data.notes;
+            const previewNotesBox = document.getElementById('previewNotes');
+            if (notes.trim() !== '') {
+                previewNotesBox.style.display = 'block';
+                document.getElementById('previewNotesText').textContent = notes;
             } else {
-                document.getElementById('previewNotes').style.display = 'none';
+                previewNotesBox.style.display = 'none';
             }
 
+            // إنشاء الطابع الزمني بصيغة ISO8601 (ZATCA)
+            const timestamp = invDate + "T" + new Date().toTimeString().split(' ')[0] + "Z";
+            const base64Qr = encodeZATCATLV(sellerName, sellerVAT, timestamp, totalWith, totalTax);
+            document.getElementById('base64Output').value = base64Qr;
+            document.getElementById('qrCard').style.display = 'block';
+
+            displayQRCode(base64Qr, 'qrcode');
+            displayQRCode(base64Qr, 'qrcode-preview');
+
             document.getElementById('invoice-preview').style.display = 'block';
+            showToast('تم توليد وتحديث الفاتورة بنجاح!');
             document.getElementById('invoice-preview').scrollIntoView({ behavior: 'smooth' });
-            showToast('✅ تم توليد الفاتورة بنجاح');
         }
 
         function escapeHtml(str) {
@@ -999,80 +982,67 @@
             });
         }
 
-        function formatDateDisplay(dateStr) {
-            if (!dateStr) return '';
-            const parts = dateStr.split('-');
-            return `${parts[2]}/${parts[1]}/${parts[0]}`;
-        }
-
-        function saveSellerData(name, vat, unified, address) {
-            localStorage.setItem('zatca_sellerName', name);
-            localStorage.setItem('zatca_sellerVAT', vat);
-            localStorage.setItem('zatca_sellerUnified', unified || '');
-            localStorage.setItem('zatca_sellerAddress', address || '');
-        }
-
-        function loadSellerData() {
-            const name = localStorage.getItem('zatca_sellerName');
-            const vat = localStorage.getItem('zatca_sellerVAT');
-            const unified = localStorage.getItem('zatca_sellerUnified');
-            const address = localStorage.getItem('zatca_sellerAddress');
-            if (name) document.getElementById('sellerName').value = name;
-            if (vat) document.getElementById('sellerVAT').value = vat;
-            if (unified) document.getElementById('sellerUnified').value = unified;
-            if (address) document.getElementById('sellerAddress').value = address;
-        }
-
         function saveDraft() {
-            const data = getInvoiceData();
-            let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-            const idx = invoices.findIndex(inv => inv.id === data.id);
-            if (idx >= 0) invoices[idx] = data;
-            else invoices.push(data);
-            localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
-            currentInvoiceId = data.id;
+            const invNum = document.getElementById('invoiceNumber').value;
+            const invDate = document.getElementById('invoiceDate').value;
+            const totalWith = document.getElementById('sumTotal').textContent;
+            let savedInvoices = JSON.parse(localStorage.getItem('saved_zatca_invoices') || '[]');
+            const existingIndex = savedInvoices.findIndex(item => item.id === invNum);
+            const invoiceData = {
+                id: invNum,
+                date: invDate,
+                total: totalWith,
+                sellerName: document.getElementById('sellerName').value,
+                sellerVAT: document.getElementById('sellerVAT').value,
+                buyerName: document.getElementById('buyerName').value,
+                items: []
+            };
+            document.querySelectorAll('#itemsBody tr').forEach(row => {
+                invoiceData.items.push({
+                    name: row.querySelector('.item-name').value,
+                    qty: row.querySelector('.item-qty').value,
+                    price: row.querySelector('.item-price').value,
+                    tax: row.querySelector('.item-tax').value
+                });
+            });
+            if (existingIndex > -1) savedInvoices[existingIndex] = invoiceData;
+            else savedInvoices.push(invoiceData);
+            localStorage.setItem('saved_zatca_invoices', JSON.stringify(savedInvoices));
             loadSidebarList();
-            showToast('💾 تم حفظ المسودة بنجاح');
+            showToast('تم حفظ الفاتورة في المسودات المحلية');
         }
 
         function loadSidebarList() {
-            const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-            const listEl = document.getElementById('saved-invoices-list');
-            if (invoices.length === 0) {
-                listEl.innerHTML = '<p style="text-align:center; opacity:0.6; padding:20px;">لا توجد فواتير محفوظة</p>';
+            const listContainer = document.getElementById('saved-invoices-list');
+            const savedInvoices = JSON.parse(localStorage.getItem('saved_zatca_invoices') || '[]');
+            if (savedInvoices.length === 0) {
+                listContainer.innerHTML = '<p style="text-align:center; opacity:0.6; padding:20px;">لا توجد فواتير محفوظة</p>';
                 return;
             }
-            listEl.innerHTML = '';
-            invoices.slice().reverse().forEach(inv => {
-                const div = document.createElement('div');
-                div.className = 'sidebar-item';
-                div.innerHTML = `
-                    <button class="delete-inv" onclick="event.stopPropagation(); deleteInvoice('${inv.id}')">🗑️</button>
-                    <div class="inv-num">${inv.invoiceNumber}</div>
-                    <div class="inv-date">${formatDateDisplay(inv.invoiceDate)}</div>
-                    <div class="inv-total">${inv.totalWithTax.toFixed(2)} ر.س</div>
+            listContainer.innerHTML = '';
+            savedInvoices.forEach(inv => {
+                const item = document.createElement('div');
+                item.className = 'sidebar-item';
+                item.setAttribute('onclick', `loadInvoice('${inv.id}')`);
+                item.innerHTML = `
+                    <button class="delete-inv" onclick="deleteInvoice(event, '${inv.id}')">×</button>
+                    <div class="inv-num">فاتورة رقم: #${inv.id}</div>
+                    <div class="inv-date">التاريخ: ${inv.date}</div>
+                    <div class="inv-total">${inv.total}</div>
                 `;
-                div.onclick = () => loadInvoice(inv.id);
-                listEl.appendChild(div);
+                listContainer.appendChild(item);
             });
         }
 
         function loadInvoice(id) {
-            const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-            const inv = invoices.find(i => i.id === id);
+            const savedInvoices = JSON.parse(localStorage.getItem('saved_zatca_invoices') || '[]');
+            const inv = savedInvoices.find(item => item.id === id);
             if (!inv) return;
-            currentInvoiceId = inv.id;
+            document.getElementById('invoiceNumber').value = inv.id;
+            document.getElementById('invoiceDate').value = inv.date;
             document.getElementById('sellerName').value = inv.sellerName || '';
             document.getElementById('sellerVAT').value = inv.sellerVAT || '';
-            document.getElementById('sellerUnified').value = inv.sellerUnified || '';
-            document.getElementById('sellerAddress').value = inv.sellerAddress || '';
-            document.getElementById('invoiceNumber').value = inv.invoiceNumber || '';
-            document.getElementById('invoiceDate').value = inv.invoiceDate || '';
             document.getElementById('buyerName').value = inv.buyerName || '';
-            document.getElementById('buyerVAT').value = inv.buyerVAT || '';
-            document.getElementById('buyerAddress').value = inv.buyerAddress || '';
-            document.getElementById('invoiceNotes').value = inv.notes || '';
-
             const tbody = document.getElementById('itemsBody');
             tbody.innerHTML = '';
             itemCount = 0;
@@ -1082,30 +1052,28 @@
                 tr.id = `item-${itemCount}`;
                 tr.innerHTML = `
                     <td>${itemCount}</td>
-                    <td><input type="text" class="item-name" value="${escapeHtml(item.name)}"></td>
+                    <td><input type="text" class="item-name" value="${escapeHtml(item.name)}" placeholder="اسم المنتج أو الخدمة"></td>
                     <td><input type="number" class="item-qty" value="${item.qty}" min="1" step="1" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
                     <td><input type="number" class="item-price" value="${item.price}" min="0" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
-                    <td><input type="number" class="item-tax" value="${item.taxRate}" min="0" max="100" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
-                    <td><input type="text" class="item-subtotal read-only" value="${item.subtotal.toFixed(2)}" readonly></td>
-                    <td><input type="text" class="item-taxval read-only" value="${item.taxVal.toFixed(2)}" readonly></td>
-                    <td><input type="text" class="item-total read-only" value="${item.total.toFixed(2)}" readonly></td>
+                    <td><input type="number" class="item-tax" value="${item.tax}" min="0" max="100" step="0.01" onchange="calculateRow(this)" oninput="calculateRow(this)"></td>
+                    <td><input type="text" class="item-subtotal read-only" readonly></td>
+                    <td><input type="text" class="item-taxval read-only" readonly></td>
+                    <td><input type="text" class="item-total read-only" readonly></td>
                     <td><button class="btn-remove-item" onclick="removeItem(this)">×</button></td>
                 `;
                 tbody.appendChild(tr);
+                calculateRow(tr.querySelector('.item-qty'));
             });
-            calculateTotals();
-            if (window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
-            showToast('📂 تم تحميل الفاتورة');
+            showToast(`تم استدعاء الفاتورة #${id}`);
         }
 
-        function deleteInvoice(id) {
-            if (!confirm('هل أنت متأكد من حذف هذه الفاتورة؟')) return;
-            let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-            invoices = invoices.filter(i => i.id !== id);
-            localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
+        function deleteInvoice(event, id) {
+            event.stopPropagation();
+            let savedInvoices = JSON.parse(localStorage.getItem('saved_zatca_invoices') || '[]');
+            savedInvoices = savedInvoices.filter(item => item.id !== id);
+            localStorage.setItem('saved_zatca_invoices', JSON.stringify(savedInvoices));
             loadSidebarList();
-            if (currentInvoiceId === id) currentInvoiceId = null;
-            showToast('🗑️ تم حذف الفاتورة');
+            showToast('تم حذف المسودة بنجاح');
         }
 
         function newInvoice() {
@@ -1115,78 +1083,86 @@
             document.getElementById('buyerVAT').value = '';
             document.getElementById('buyerAddress').value = '';
             document.getElementById('invoiceNotes').value = '';
-            setDefaultDate();
             document.getElementById('itemsBody').innerHTML = '';
             itemCount = 0;
-            addItem(); addItem();
-            calculateTotals();
+            addItem();
+            addItem();
             document.getElementById('invoice-preview').style.display = 'none';
             document.getElementById('qrCard').style.display = 'none';
-            if (window.innerWidth <= 992) document.getElementById('sidebar').classList.remove('open');
-            showToast('📝 فاتورة جديدة');
+            showToast('تم إنشاء مسودة فاتورة جديدة');
         }
 
         function printInvoice() {
             if (document.getElementById('invoice-preview').style.display !== 'block') {
-                showToast('⚠️ يرجى توليد الفاتورة أولاً');
-                return;
+                generateInvoice();
+                setTimeout(() => window.print(), 500);
+            } else {
+                window.print();
             }
-            window.print();
         }
 
-        async function exportPDF() {
+        function exportPDF() {
             if (document.getElementById('invoice-preview').style.display !== 'block') {
-                showToast('⚠️ يرجى توليد الفاتورة أولاً');
-                return;
+                generateInvoice();
             }
-            showToast('⏳ جاري إنشاء ملف PDF...');
-            try {
-                const element = document.getElementById('invoicePage');
-                const canvas = await html2canvas(element, {
-                    scale: 3,
-                    useCORS: true,
-                    backgroundColor: '#ffffff',
-                    logging: false
+            showToast('جاري تحضير ملف PDF...');
+            const element = document.getElementById('invoicePage');
+            const { jsPDF } = window.jspdf;
+            html2canvas(element, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+                pdf.save(`ZATCA-Invoice-${document.getElementById('invoiceNumber').value}.pdf`);
+                showToast('تم تحميل الفاتورة بصيغة PDF بنجاح');
+            }).catch(err => { console.error(err); showToast('فشل إنشاء PDF'); });
+        }
+
+        function loadSellerData() {
+            const fields = ['sellerName', 'sellerVAT', 'sellerUnified', 'sellerAddress'];
+            fields.forEach(field => {
+                const saved = localStorage.getItem(`zatca_${field}`);
+                if (saved) document.getElementById(field).value = saved;
+                document.getElementById(field).addEventListener('input', (e) => {
+                    localStorage.setItem(`zatca_${field}`, e.target.value);
                 });
-                const imgData = canvas.toDataURL('image/jpeg', 1.0);
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
-                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-                const data = getInvoiceData();
-                pdf.save(`فاتورة_${data.invoiceNumber}.pdf`);
-                showToast('✅ تم تصدير PDF بنجاح');
-            } catch (err) {
-                console.error(err);
-                showToast('❌ حدث خطأ أثناء إنشاء PDF');
-            }
-        }
-
-        function toggleTheme() {
-            const isDark = document.body.getAttribute('data-theme') === 'dark';
-            document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            localStorage.setItem('zatca_theme', isDark ? 'light' : 'dark');
-            const btn = document.querySelector('.theme-toggle');
-            if (btn) btn.textContent = isDark ? '🌙 الوضع الليلي' : '☀️ الوضع الفاتح';
-        }
-
-        function loadTheme() {
-            const theme = localStorage.getItem('zatca_theme') || 'light';
-            document.body.setAttribute('data-theme', theme);
-            const btn = document.querySelector('.theme-toggle');
-            if (btn) btn.textContent = theme === 'dark' ? '☀️ الوضع الفاتح' : '🌙 الوضع الليلي';
+            });
         }
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
         }
 
-        function showToast(message, bgColor) {
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const toggleBtn = document.querySelector('.theme-toggle');
+            if (currentTheme === 'dark') {
+                body.removeAttribute('data-theme');
+                toggleBtn.textContent = '🌙 الوضع الليلي';
+                localStorage.setItem('zatca_theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                toggleBtn.textContent = '☀️ الوضع النهاري';
+                localStorage.setItem('zatca_theme', 'dark');
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('zatca_theme');
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                const btn = document.querySelector('.theme-toggle');
+                if (btn) btn.textContent = '☀️ الوضع النهاري';
+            }
+        }
+
+        function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
-            if (bgColor) toast.style.background = bgColor;
-            else toast.style.background = 'var(--accent)';
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+            setTimeout(() => toast.classList.remove('show'), 3000);
         }
     </script>
 </body>
