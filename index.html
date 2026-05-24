@@ -284,7 +284,7 @@
             margin: auto;
             background: #ffffff;
             color: #1d1d1d;
-            padding: 8mm 14mm 14mm 14mm; /* تم تعديل الهوامش العلوية لرفع المحتوى */
+            padding: 8mm 14mm 14mm 14mm; 
             box-shadow: 0 0 10px rgba(0,0,0,0.08);
             font-family: 'Cairo', sans-serif;
             position: relative;
@@ -297,8 +297,8 @@
             align-items: flex-start;
             width: 100%;
             border-bottom: 2px solid #d9d9d9;
-            padding-bottom: 10px; /* تم التقليل */
-            margin-bottom: 15px; /* تم التقليل */
+            padding-bottom: 10px; 
+            margin-bottom: 15px; 
         }
 
         .invoice-top-left,
@@ -325,17 +325,17 @@
         }
 
         .invoice-company-name {
-            font-size: 18px; /* تم التصغير */
-            font-weight: 800; /* تم زيادة السماكة */
+            font-size: 18px; 
+            font-weight: 800; 
             color: #000000;
-            margin-bottom: 2px; /* تم تقريب الأسطر */
+            margin-bottom: 2px; 
         }
 
         .invoice-company-line {
-            font-size: 11px; /* تم التصغير */
-            line-height: 1.3; /* تم تقريب الأسطر */
+            font-size: 11px; 
+            line-height: 1.3; 
             color: #000000;
-            font-weight: 800; /* تم زيادة السماكة */
+            font-weight: 800; 
         }
 
         .invoice-main-title {
@@ -343,7 +343,7 @@
             font-size: 34px;
             font-weight: 700;
             color: #17347a;
-            margin: 10px 0 15px; /* تم التقليل */
+            margin: 10px 0 15px; 
         }
 
         /* fixed table layouts */
@@ -367,6 +367,12 @@
             background: #fafafa;
         }
 
+        /* التعديل الجديد: محاذاة العمود الأخير (الإنجليزي) إلى اليسار */
+        .invoice-info-table td:last-child {
+            text-align: left;
+            direction: ltr;
+        }
+
         .invoice-items-table {
             width: 100%;
             border-collapse: collapse;
@@ -376,9 +382,9 @@
 
         .invoice-items-table th {
             border: 1px solid #d9d9d9;
-            border-left: none; /* إزالة الفواصل الرأسية */
-            border-right: none; /* إزالة الفواصل الرأسية */
-            padding: 7px 6px; /* مساواة الارتفاع مع جدول العملاء */
+            border-left: none; 
+            border-right: none; 
+            padding: 7px 6px; 
             font-size: 12px;
             color: #1d2f6f;
             background: #fafafa;
@@ -387,13 +393,12 @@
 
         .invoice-items-table td {
             border: 1px solid #d9d9d9;
-            border-left: none; /* إزالة الفواصل الرأسية */
-            border-right: none; /* إزالة الفواصل الرأسية */
-            padding: 7px 6px; /* مساواة الارتفاع مع جدول العملاء */
+            border-left: none; 
+            border-right: none; 
+            padding: 7px 6px; 
             font-size: 13px;
             text-align: center;
             vertical-align: middle;
-            /* تم إزالة height: 72px; */
         }
 
         .invoice-items-table .desc {
